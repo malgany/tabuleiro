@@ -40,7 +40,7 @@ body {
   aspect-ratio: 1 / 1; /* canvas quadrado para simplificar */
 }
 
-/* Linhas e rótulos laterais */
+/* Rótulos laterais */
 .measure {
   position: absolute;
   top: 6%;
@@ -50,15 +50,6 @@ body {
 
 .measure-left { left: -8%; }
 .measure-right { right: -8%; }
-
-.measure .line {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 0;
-  bottom: 0;
-  border-left: 2px solid var(--line);
-}
 
 .measure .label {
   position: absolute;
@@ -71,7 +62,7 @@ body {
   color: var(--black);
 }
 
-/* Alinhar o texto ao lado da linha vertical */
+/* Posicionamento do texto */
 .measure-left .label {
   left: calc(50% + 12px);
   transform: none;
