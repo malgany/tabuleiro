@@ -82,6 +82,16 @@
     const grid = document.querySelector('.grid');
     if (!grid) return;
 
+    const pvBar = document.querySelector('.status-bar .pv');
+    const pmBar = document.querySelector('.status-bar .pm');
+    const paBar = document.querySelector('.status-bar .pa');
+
+    function updateStatusBar(state) {
+      if (pvBar) pvBar.textContent = `${state.pv}/10`;
+      if (pmBar) pmBar.textContent = `${state.pm}`;
+      if (paBar) paBar.textContent = `${state.pa}`;
+    }
+
     const cards = Array.from(grid.children);
     // Indexa as células e define data attributes
     cards.forEach((el, i) => {
@@ -127,7 +137,6 @@
     let activeId = 'blue';
     const getActive = () => units[activeId];
     const getInactive = () => units[activeId === 'blue' ? 'red' : 'blue'];
-
     const playerStatusEl = document.getElementById('player-status');
     const opponentHoverEl = document.createElement('div');
     opponentHoverEl.className = 'opponent-hover';
@@ -142,6 +151,7 @@
         `<div class="metric"><span class="k">PA</span><span class="v">${active.pa}</span></div>`;
       playerStatusEl.classList.toggle('blue', active.id === 'blue');
       playerStatusEl.classList.toggle('red', active.id === 'red');
+      updateStatusBar(active);
     }
 
     function showOpponentStatus(unit) {
