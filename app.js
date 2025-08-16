@@ -167,6 +167,12 @@
     // Instancia ambas as unidades
     units.blue.el = createUnitEl('blue');
     units.red.el = createUnitEl('red');
+
+    const enemyTooltip = document.createElement('div');
+    enemyTooltip.className = 'enemy-tooltip';
+    enemyTooltip.style.display = 'none';
+    document.body.appendChild(enemyTooltip);
+
     mountUnit(units.blue);
     mountUnit(units.red);
 
@@ -207,6 +213,18 @@
     units.red.el.addEventListener('mouseenter', () => {
       if (activeId !== 'red') return;
       showReachableFor(units.red);
+    });
+
+    units.red.el.addEventListener('mouseenter', ev => {
+      enemyTooltip.innerHTML = `PV: ${units.red.pv}<br>PA: ${units.red.pa}<br>PM: ${units.red.pm}`;
+      const rect = units.red.el.getBoundingClientRect();
+      enemyTooltip.style.left = `${rect.right + 8 + window.scrollX}px`;
+      enemyTooltip.style.top = `${rect.top + window.scrollY}px`;
+      enemyTooltip.style.display = 'block';
+    });
+
+    units.red.el.addEventListener('mouseleave', () => {
+      enemyTooltip.style.display = 'none';
     });
 
     // Clique para mover para uma célula alcançável
