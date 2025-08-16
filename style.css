@@ -1,0 +1,323 @@
+:root {
+  --bg: #c7cbd1; /* cinza do fundo da arte */
+  --board-bg: rgba(255, 255, 255, 0.2);
+  --text: #1f2937;
+  --line: rgba(0, 0, 0, 0.5);
+  --card: #fafafa;
+  --card-border: #cfd4dc;
+  --red: #dc2626;
+  --blue: #2563eb;
+  --black: #111827;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.layout {
+  position: relative;
+  width: min(840px, 90vw);
+  aspect-ratio: 1 / 1; /* canvas quadrado para simplificar */
+}
+
+/* Linhas e rótulos laterais */
+.measure {
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  width: 0;
+}
+
+.measure-left { left: -8%; }
+.measure-right { right: -8%; }
+
+.measure .line {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  border-left: 2px solid var(--line);
+}
+
+.measure .label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 45%;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+  color: var(--black);
+}
+
+/* Alinhar o texto ao lado da linha vertical */
+.measure-left .label {
+  left: calc(50% + 12px);
+  transform: none;
+  text-align: left;
+  top: 16%;
+}
+
+.measure-right .label {
+  left: auto;
+  right: calc(50% + 12px);
+  transform: none;
+  text-align: right;
+  top: 72%;
+}
+
+/* Métricas (chave e valor lado a lado) */
+.measure .metric {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 8px;
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 1.1;
+}
+
+/* cores do texto conforme lado (esquerda = vermelho, direita = azul) */
+.measure-left .metric { color: var(--red); }
+.measure-right .metric { color: var(--blue); }
+
+.measure .metric .k { font-weight: 800; }
+.measure .metric .v { font-weight: 700; }
+
+.measure .big { font-weight: 800; font-size: clamp(18px, 2.2vw, 28px); }
+.measure .small { font-weight: 700; letter-spacing: 1px; }
+
+.midline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--line);
+  opacity: 0.4;
+}
+
+/* Tabuleiro */
+.board {
+  position: absolute;
+  inset: 6% 12%;
+  display: grid;
+  place-items: center;
+}
+
+.grid {
+  --cols: 4;
+  --rows: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  gap: clamp(8px, 1.6vw, 16px);
+  height: 100%;
+  width: auto;
+  aspect-ratio: var(--cols) / var(--rows); /* garante células quadradas */
+}
+
+.card,
+.spacer {
+  border-radius: 10px;
+}
+
+.spacer { /* espaço vazio */
+  outline: 2px dashed transparent;
+}
+
+.card {
+  background: var(--card);
+  border: 2px solid var(--card-border);
+  box-shadow: 0 4px 10px rgba(0,0,0,.12);
+  position: relative;
+}
+
+/* Unidade sobre a célula */
+.unit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  aspect-ratio: 1 / 1;
+  background: rgba(17, 24, 39, 0.9);
+  border: 2px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(0,0,0,.25);
+  cursor: pointer;
+}
+
+/* Alcance (células verdes) */
+.card.reachable {
+  outline: 3px solid rgba(16, 185, 129, 0.85);
+  outline-offset: -3px;
+}
+
+/* Diferenciar unidades e turno ativo */
+.unit.unit-blue { background: rgba(29, 78, 216, 0.9); }
+.unit.unit-red { background: rgba(220, 38, 38, 0.9); }
+.unit.is-active { box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(16,185,129,.9); }
+
+/* Painel de turno */
+.turn-panel {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 10px;
+  align-items: center;
+  background: rgba(17,24,39,.8);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+  z-index: 10;
+}
+
+.turn-panel .pass-btn {
+  appearance: none;
+  border: 0;
+  background: #10b981;
+  color: #0b1020;
+  font-weight: 800;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.turn-panel .pass-btn:hover { filter: brightness(1.05); }
+
+.turn-panel .turn-timer {
+  font-weight: 700;
+  opacity: .9;
+}
+
+/* Face simplificada: cantos com Naipe/A */
+.card.face::before,
+.card.face::after {
+  content: "A";
+  position: absolute;
+  font-weight: 800;
+  font-size: clamp(14px, 1.8vw, 18px);
+}
+
+.card.face::before {
+  left: 8px; top: 6px;
+}
+.card.face::after {
+  right: 8px; bottom: 6px;
+}
+
+/* Naipe central */
+.card.face::marker { content: ""; }
+.card.face .pip { display: none; }
+
+.card.face.diamond { --pip: "◆"; --pip-color: var(--red); }
+.card.face.club { --pip: "♣"; --pip-color: var(--black); }
+
+.card.face > .center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(26px, 5vw, 44px);
+  color: var(--pip-color);
+}
+
+.card.face.diamond::before,
+.card.face.diamond::after { color: var(--red); }
+.card.face.club::before,
+.card.face.club::after { color: var(--black); }
+
+/* Verso simplificado */
+.card.back {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255,255,255,.9), rgba(255,255,255,0) 40%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.15) 0 6px, rgba(255,255,255,0) 6px 12px);
+  border-width: 3px;
+}
+.card.back.red { border-color: var(--red); }
+.card.back.blue { border-color: var(--blue); }
+
+/* Inserir pip central via elemento extra, usando pseudo grid helper */
+.card.face::after,
+.card.face::before { letter-spacing: 1px; }
+
+.card.face::before { content: "A"; }
+.card.face::after { content: "A"; }
+
+/* Elemento central usando ::part alternativo com wrapper */
+.card.face::outline { content: ""; }
+
+/* Utilitário para inserir o pip */
+.card.face::selection { background: transparent; }
+
+/* Usa um pseudo-elemento adicional dentro via background text */
+.card.face { display: grid; place-items: center; }
+.card.face::before { justify-self: start; align-self: start; margin: 6px 0 0 8px; }
+.card.face::after { justify-self: end; align-self: end; margin: 0 8px 6px 0; }
+.card.face::marker { color: transparent; }
+.card.face::backdrop { color: transparent; }
+
+/* pip central como texto do próprio elemento */
+.card.face { font-variant-numeric: lining-nums; }
+.card.face.diamond { color: var(--red); }
+.card.face.club { color: var(--black); }
+.card.face::before { content: "A"; }
+.card.face::after { content: "A"; }
+.card.face::part(pip) { display: none; }
+
+.card.face::after,
+.card.face::before { font-family: inherit; }
+
+.card.face::after,
+.card.face::before { line-height: 1; }
+
+.card.face::after,
+.card.face::before { font-weight: 800; }
+
+.card.face::after,
+.card.face::before { font-size: clamp(14px, 1.8vw, 18px); }
+
+.card.face::after,
+.card.face::before { color: currentColor; }
+
+.card.face::after,
+.card.face::before { opacity: 0.95; }
+
+.card.face::before { position: absolute; left: 8px; top: 6px; }
+.card.face::after { position: absolute; right: 8px; bottom: 6px; }
+
+/* removidos blocos vazios para manter o CSS limpo */
+
+/* Pip central via ::before of child created in HTML (simpler) */
+/* helper não utilizado removido */
+
+/* Ajuste do conteúdo central real */
+.card.face > .center::before {
+  content: var(--pip);
+}
+
+
