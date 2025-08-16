@@ -1,0 +1,16 @@
+{
+  "name": "tabuleiro",
+  "version": "1.0.0",
+  "description": "Protótipo de jogo de tabuleiro com cartas e turnos, escrito em HTML, CSS e JavaScript.",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
