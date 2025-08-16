@@ -101,6 +101,16 @@
     const grid = document.querySelector('.grid');
     if (!grid) return;
 
+    const pvBar = document.querySelector('.status-bar .pv');
+    const pmBar = document.querySelector('.status-bar .pm');
+    const paBar = document.querySelector('.status-bar .pa');
+
+    function updateStatusBar(state) {
+      if (pvBar) pvBar.textContent = `${state.pv}/10`;
+      if (pmBar) pmBar.textContent = `${state.pm}`;
+      if (paBar) paBar.textContent = `${state.pa}`;
+    }
+
     const cards = Array.from(grid.children);
     // Indexa as células e define data attributes
     cards.forEach((el, i) => {
@@ -148,6 +158,7 @@
     const getInactive = () => units[activeId === 'blue' ? 'red' : 'blue'];
 
     updateHudAll(units.blue, units.red);
+    updateStatusBar(getActive());
 
     // Cria o elemento da unidade
     function createUnitEl(id) {
@@ -231,6 +242,7 @@
       active.pos = { row: r, col: c };
       mountUnit(active);
       updateHudAll(units.blue, units.red);
+      updateStatusBar(getActive());
 
       // Atualiza destaque conforme PM restante
       showReachableFor(active);
@@ -289,6 +301,7 @@
       reflectActiveStyles();
       clearReachable();
       updateHudAll(units.blue, units.red);
+      updateStatusBar(getActive());
       startTurnTimer();
     }
 
@@ -297,6 +310,7 @@
     // Inicia o primeiro turno
     reflectActiveStyles();
     startTurnTimer();
+    updateStatusBar(getActive());
 
     console.log('[Tabuleiro] Unidades inicializadas', units);
   });
