@@ -31,9 +31,18 @@
     });
   }
 
+  let bluePanelRefs = null;
+  function updateBluePanel(state) {
+    if (!bluePanelRefs) return;
+    bluePanelRefs.pv.textContent = `${state.pv}/10`;
+    bluePanelRefs.pa.textContent = `${state.pa}`;
+    bluePanelRefs.pm.textContent = `${state.pm}`;
+  }
+
   function updateHudAll(blueState, redState) {
     updateHudSide('.measure-left', blueState);
     updateHudSide('.measure-right', redState);
+    updateBluePanel(blueState);
   }
 
   function computeReachable(start, pm, isAllowed) {
@@ -279,12 +288,30 @@
       }
     }
 
-    // Painel e botão de passar vez
+    // Painel inferior com slots, métricas e botão de passar vez
     const panel = document.createElement('div');
     panel.className = 'turn-panel';
+
+    const slots = document.createElement('div');
+    slots.className = 'slots';
+    for (let i = 0; i < 4; i++) {
+      const slot = document.createElement('div');
+      slot.className = 'slot';
+      slots.appendChild(slot);
+    }
+
+    const metrics = document.createElement('div');
+    metrics.className = 'metrics';
+    metrics.innerHTML = `
+      <div class="metric"><span class="k">PV</span><span class="v pv"></span></div>
+      <div class="metric"><span class="k">PA</span><span class="v pa"></span></div>
+      <div class="metric"><span class="k">PM</span><span class="v pm"></span></div>
+    `;
+
     const passBtn = document.createElement('button');
     passBtn.className = 'pass-btn';
     passBtn.type = 'button';
+
     const timerEl = document.createElement('span');
     timerEl.className = 'turn-timer';
 
@@ -293,9 +320,18 @@
       timerEl.textContent = `(${Math.max(0, timeLeft)}s)`;
     }
 
+    panel.appendChild(slots);
+    panel.appendChild(metrics);
     panel.appendChild(passBtn);
     panel.appendChild(timerEl);
     document.body.appendChild(panel);
+
+    bluePanelRefs = {
+      pv: metrics.querySelector('.pv'),
+      pa: metrics.querySelector('.pa'),
+      pm: metrics.querySelector('.pm'),
+    };
+    updateBluePanel(units.blue);
 
     function passTurn() {
       // Reseta PM do que terminou

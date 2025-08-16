@@ -196,18 +196,44 @@ body {
 /* Painel de turno */
 .turn-panel {
   position: fixed;
-  right: 16px;
-  bottom: 16px;
-  display: inline-grid;
-  grid-auto-flow: column;
-  gap: 10px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
   align-items: center;
+  gap: 16px;
   background: rgba(17,24,39,.8);
   color: #fff;
-  padding: 10px 12px;
-  border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+  padding: 10px 16px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,.35);
   z-index: 10;
+}
+
+.turn-panel .slots {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.turn-panel .slot {
+  border: 2px dashed rgba(255,255,255,.3);
+  border-radius: 6px;
+  min-height: 50px;
+}
+
+.turn-panel .metrics {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.turn-panel .metrics .metric {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 6px;
 }
 
 .turn-panel .pass-btn {
@@ -219,6 +245,7 @@ body {
   padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
+  margin-left: auto;
 }
 
 .turn-panel .pass-btn:hover { filter: brightness(1.05); }
@@ -226,6 +253,7 @@ body {
 .turn-panel .turn-timer {
   font-weight: 700;
   opacity: .9;
+  margin-left: 8px;
 }
 
 /* Face simplificada: cantos com Naipe/A */
