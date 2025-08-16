@@ -81,7 +81,10 @@ export function initUI() {
   panel.appendChild(metrics);
   panel.appendChild(passBtn);
   panel.appendChild(timerEl);
-  document.body.appendChild(panel);
+  const page = document.querySelector('.page');
+  if (page) {
+    page.appendChild(panel);
+  }
 
   bluePanelRefs = {
     pv: metrics.querySelector('.pv'),
