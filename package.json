@@ -2,7 +2,7 @@
   "name": "tabuleiro",
   "version": "1.0.0",
   "description": "Protótipo de jogo de tabuleiro com cartas e turnos, escrito em HTML, CSS e JavaScript.",
-  "main": "map.html",
+  "main": "index.html",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },

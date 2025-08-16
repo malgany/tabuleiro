@@ -8,9 +8,16 @@
       <link rel="stylesheet" href="./css/layout.css" />
       <link rel="stylesheet" href="./css/cards.css" />
       <link rel="stylesheet" href="./css/turn-panel.css" />
+      <link rel="stylesheet" href="./css/map.css" />
   </head>
   <body>
-    <div class="page">
+    <div id="map-screen">
+      <div class="map-container" id="map">
+        <button id="play" class="pass-btn map-play-btn">Jogar</button>
+      </div>
+    </div>
+
+    <div class="page" id="board-screen" style="display:none">
       <div class="layout" aria-label="tabuleiro">
         <div class="midline" aria-hidden="true"></div>
 
@@ -56,7 +63,6 @@
       </div>
     </div>
     <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/map.js"></script>
   </body>
-  </html>
-
-
+</html>

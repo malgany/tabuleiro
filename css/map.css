@@ -1,0 +1,39 @@
+/* Estilos para o mapa de fases */
+#map-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.map-container {
+  position: relative;
+  width: 200px;
+  height: 600px;
+}
+
+.map-node {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #6b7280;
+  border: 2px solid #374151;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.map-node.current {
+  background: #10b981;
+  border-color: #059669;
+}
+
+.map-connection {
+  position: absolute;
+  width: 4px;
+  background: #374151;
+}
+
+.map-play-btn {
+  position: absolute;
+}
+
