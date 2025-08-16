@@ -1,0 +1,100 @@
+.page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.layout {
+  position: relative;
+  width: min(840px, 90vw);
+  aspect-ratio: 1 / 1; /* canvas quadrado para simplificar */
+}
+
+/* Rótulos laterais */
+.measure {
+  position: absolute;
+  top: 6%;
+  bottom: 6%;
+  width: 0;
+}
+
+.measure-left { left: -8%; }
+.measure-right { right: -8%; }
+
+.measure .label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 45%;
+  display: grid;
+  gap: 6px;
+  text-align: center;
+  color: var(--black);
+}
+
+/* Posicionamento do texto */
+.measure-left .label {
+  left: calc(50% + 12px);
+  transform: none;
+  text-align: left;
+  top: 16%;
+}
+
+.measure-right .label {
+  left: auto;
+  right: calc(50% + 12px);
+  transform: none;
+  text-align: right;
+  top: 72%;
+}
+
+/* Métricas (chave e valor lado a lado) */
+.measure .metric {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 8px;
+  font-size: clamp(14px, 1.8vw, 18px);
+  line-height: 1.1;
+}
+
+/* cores do texto conforme lado (esquerda = vermelho, direita = azul) */
+.measure-left .metric { color: var(--red); }
+.measure-right .metric { color: var(--blue); }
+
+.measure .metric .k { font-weight: 800; }
+.measure .metric .v { font-weight: 700; }
+
+.measure .big { font-weight: 800; font-size: clamp(18px, 2.2vw, 28px); }
+.measure .small { font-weight: 700; letter-spacing: 1px; }
+
+.midline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  background: var(--line);
+  opacity: 0.4;
+}
+
+/* Tabuleiro */
+.board {
+  position: absolute;
+  inset: 6% 12%;
+  display: grid;
+  place-items: center;
+}
+
+.grid {
+  --cols: 4;
+  --rows: 6;
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  gap: clamp(8px, 1.6vw, 16px);
+  height: 100%;
+  width: auto;
+  aspect-ratio: var(--cols) / var(--rows); /* garante células quadradas */
+}

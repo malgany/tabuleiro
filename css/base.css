@@ -1,0 +1,28 @@
+:root {
+  --bg: #c7cbd1; /* cinza do fundo da arte */
+  --board-bg: rgba(255, 255, 255, 0.2);
+  --text: #1f2937;
+  --line: rgba(0, 0, 0, 0.5);
+  --card: #fafafa;
+  --card-border: #cfd4dc;
+  --red: #dc2626;
+  --blue: #2563eb;
+  --black: #111827;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, Noto Sans, "Apple Color Emoji", "Segoe UI Emoji";
+}
