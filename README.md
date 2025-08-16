@@ -16,6 +16,6 @@ Protótipo de jogo de tabuleiro com cartas e turnos, escrito em HTML, CSS e Java
 ## Estrutura
 
 - `index.html`: marcação principal do tabuleiro.
-- `style.css`: estilos da interface.
-- `app.js`: lógica de jogo e controle de turnos.
+- Diretório `css/`: estilos da interface.
+- `js/main.js`: lógica de jogo e controle de turnos.
 
