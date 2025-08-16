@@ -16,33 +16,12 @@
     return row >= 0 && row < ROWS && col >= 0 && col < COLS;
   }
 
-  function updateHudSide(containerSelector, state) {
-    const container = document.querySelector(containerSelector);
-    if (!container) return;
-    const metrics = container.querySelectorAll('.metric');
-    metrics.forEach(metric => {
-      const key = metric.querySelector('.k');
-      const val = metric.querySelector('.v');
-      if (!key || !val) return;
-      const k = key.textContent.trim();
-      if (k === 'PV') val.textContent = `${state.pv}/10`;
-      if (k === 'PM') val.textContent = `${state.pm}`;
-      if (k === 'PA') val.textContent = `${state.pa}`;
-    });
-  }
-
   let bluePanelRefs = null;
   function updateBluePanel(state) {
     if (!bluePanelRefs) return;
     bluePanelRefs.pv.textContent = `${state.pv}/10`;
     bluePanelRefs.pa.textContent = `${state.pa}`;
     bluePanelRefs.pm.textContent = `${state.pm}`;
-  }
-
-  function updateHudAll(blueState, redState) {
-    updateHudSide('.measure-left', blueState);
-    updateHudSide('.measure-right', redState);
-    updateBluePanel(blueState);
   }
 
   function computeReachable(start, pm, isAllowed) {
@@ -156,7 +135,7 @@
     const getActive = () => units[activeId];
     const getInactive = () => units[activeId === 'blue' ? 'red' : 'blue'];
 
-    updateHudAll(units.blue, units.red);
+    updateBluePanel(units.blue);
 
     // Cria o elemento da unidade
     function createUnitEl(id) {
@@ -257,7 +236,7 @@
       active.pm -= cost;
       active.pos = { row: r, col: c };
       mountUnit(active);
-      updateHudAll(units.blue, units.red);
+      updateBluePanel(units.blue);
 
       // Atualiza destaque conforme PM restante
       showReachableFor(active);
@@ -342,7 +321,7 @@
       activeId = activeId === 'blue' ? 'red' : 'blue';
       reflectActiveStyles();
       clearReachable();
-      updateHudAll(units.blue, units.red);
+      updateBluePanel(units.blue);
       startTurnTimer();
     }
 
