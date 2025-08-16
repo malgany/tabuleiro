@@ -3,7 +3,7 @@ const path = [
   { x: 80, y: 120 },
   { x: 80, y: 220 },
   { x: 80, y: 320 },
-  { x: 80, y: 420 }
+  { x: 80, y: 420 },
 ];
 
 const stageKey = 'stage';
@@ -22,10 +22,12 @@ if (localStorage.getItem(playedKey)) {
 localStorage.setItem(stageKey, stage);
 
 const container = document.getElementById('map');
+const mapScreen = document.getElementById('map-screen');
+const boardScreen = document.getElementById('board-screen');
 
 path.forEach((node, idx) => {
   const el = document.createElement('div');
-  el.className = 'node' + (idx === stage ? ' current' : '');
+  el.className = 'map-node' + (idx === stage ? ' current' : '');
   el.style.left = `${node.x}px`;
   el.style.top = `${node.y}px`;
   container.appendChild(el);
@@ -33,9 +35,9 @@ path.forEach((node, idx) => {
   if (idx > 0) {
     const prev = path[idx - 1];
     const conn = document.createElement('div');
-    conn.className = 'connection';
+    conn.className = 'map-connection';
     conn.style.left = `${prev.x + 10}px`;
-    conn.style.top = `${prev.y + 10}px`;
+    conn.style.top = `${prev.y + 12}px`;
     conn.style.height = `${node.y - prev.y}px`;
     container.appendChild(conn);
   }
@@ -54,5 +56,6 @@ if (current) {
 playBtn.addEventListener('click', () => {
   localStorage.setItem(stageKey, stage);
   localStorage.setItem(playedKey, 'true');
-  window.location.href = 'index.html';
+  if (mapScreen) mapScreen.style.display = 'none';
+  if (boardScreen) boardScreen.style.display = 'block';
 });

@@ -39,7 +39,7 @@
   gap: 6px;
 }
 
-.turn-panel .pass-btn {
+.pass-btn {
   appearance: none;
   border: 0;
   background: #10b981;
@@ -50,7 +50,7 @@
   cursor: pointer;
 }
 
-.turn-panel .pass-btn:hover { filter: brightness(1.05); }
+.pass-btn:hover { filter: brightness(1.05); }
 
 .turn-panel .turn-timer {
   font-weight: 700;
