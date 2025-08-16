@@ -16,25 +16,6 @@
     return row >= 0 && row < ROWS && col >= 0 && col < COLS;
   }
 
-  function updateHudSide(containerSelector, state) {
-    const container = document.querySelector(containerSelector);
-    if (!container) return;
-    const metrics = container.querySelectorAll('.metric');
-    metrics.forEach(metric => {
-      const key = metric.querySelector('.k');
-      const val = metric.querySelector('.v');
-      if (!key || !val) return;
-      const k = key.textContent.trim();
-      if (k === 'PV') val.textContent = `${state.pv}/10`;
-      if (k === 'PM') val.textContent = `${state.pm}`;
-      if (k === 'PA') val.textContent = `${state.pa}`;
-    });
-  }
-
-  function updateHudAll(blueState, redState) {
-    updateHudSide('.measure-left', blueState);
-    updateHudSide('.measure-right', redState);
-  }
 
   function computeReachable(start, pm, isAllowed) {
     const deltas = [
@@ -147,7 +128,41 @@
     const getActive = () => units[activeId];
     const getInactive = () => units[activeId === 'blue' ? 'red' : 'blue'];
 
-    updateHudAll(units.blue, units.red);
+    const playerStatusEl = document.getElementById('player-status');
+    const opponentHoverEl = document.createElement('div');
+    opponentHoverEl.className = 'opponent-hover';
+    document.body.appendChild(opponentHoverEl);
+
+    function renderPlayerStatus() {
+      const active = getActive();
+      if (!playerStatusEl) return;
+      playerStatusEl.innerHTML =
+        `<div class="metric"><span class="k">PV</span><span class="v">${active.pv}/10</span></div>` +
+        `<div class="metric"><span class="k">PM</span><span class="v">${active.pm}</span></div>` +
+        `<div class="metric"><span class="k">PA</span><span class="v">${active.pa}</span></div>`;
+      playerStatusEl.classList.toggle('blue', active.id === 'blue');
+      playerStatusEl.classList.toggle('red', active.id === 'red');
+    }
+
+    function showOpponentStatus(unit) {
+      if (!opponentHoverEl || !unit.el) return;
+      opponentHoverEl.innerHTML =
+        `<div class="metric"><span class="k">PV</span><span class="v">${unit.pv}/10</span></div>` +
+        `<div class="metric"><span class="k">PM</span><span class="v">${unit.pm}</span></div>` +
+        `<div class="metric"><span class="k">PA</span><span class="v">${unit.pa}</span></div>`;
+      opponentHoverEl.classList.toggle('blue', unit.id === 'blue');
+      opponentHoverEl.classList.toggle('red', unit.id === 'red');
+      const rect = unit.el.getBoundingClientRect();
+      opponentHoverEl.style.left = `${rect.left + rect.width / 2}px`;
+      opponentHoverEl.style.top = `${rect.top}px`;
+      opponentHoverEl.style.display = 'grid';
+    }
+
+    function hideOpponentStatus() {
+      opponentHoverEl.style.display = 'none';
+    }
+
+    renderPlayerStatus();
 
     // Cria o elemento da unidade
     function createUnitEl(id) {
@@ -199,14 +214,26 @@
       }
     }
 
-    // Exibe alcance quando o mouse entra na unidade ativa
+    // Exibe alcance da unidade ativa e status do oponente no hover
     units.blue.el.addEventListener('mouseenter', () => {
-      if (activeId !== 'blue') return;
-      showReachableFor(units.blue);
+      if (activeId === 'blue') {
+        showReachableFor(units.blue);
+      } else {
+        showOpponentStatus(units.blue);
+      }
+    });
+    units.blue.el.addEventListener('mouseleave', () => {
+      if (activeId !== 'blue') hideOpponentStatus();
     });
     units.red.el.addEventListener('mouseenter', () => {
-      if (activeId !== 'red') return;
-      showReachableFor(units.red);
+      if (activeId === 'red') {
+        showReachableFor(units.red);
+      } else {
+        showOpponentStatus(units.red);
+      }
+    });
+    units.red.el.addEventListener('mouseleave', () => {
+      if (activeId !== 'red') hideOpponentStatus();
     });
 
     // Clique para mover para uma célula alcançável
@@ -230,7 +257,7 @@
       active.pm -= cost;
       active.pos = { row: r, col: c };
       mountUnit(active);
-      updateHudAll(units.blue, units.red);
+      renderPlayerStatus();
 
       // Atualiza destaque conforme PM restante
       showReachableFor(active);
@@ -288,7 +315,8 @@
       activeId = activeId === 'blue' ? 'red' : 'blue';
       reflectActiveStyles();
       clearReachable();
-      updateHudAll(units.blue, units.red);
+      renderPlayerStatus();
+      hideOpponentStatus();
       startTurnTimer();
     }
 

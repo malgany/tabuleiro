@@ -214,6 +214,59 @@ body {
   opacity: .9;
 }
 
+/* Barra de status do jogador */
+.player-status {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 12px;
+  background: rgba(17,24,39,.85);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+  font-size: clamp(14px, 1.8vw, 18px);
+  z-index: 10;
+}
+
+.player-status.blue { color: var(--blue); }
+.player-status.red { color: var(--red); }
+
+.player-status .metric,
+.opponent-hover .metric {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 8px;
+  line-height: 1.1;
+}
+
+.player-status .metric .k,
+.opponent-hover .metric .k { font-weight: 800; }
+
+.player-status .metric .v,
+.opponent-hover .metric .v { font-weight: 700; }
+
+/* Tooltip de status do adversário */
+.opponent-hover {
+  position: absolute;
+  display: none;
+  background: rgba(17,24,39,.9);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3);
+  transform: translate(-50%, -110%);
+  font-size: clamp(12px, 1.5vw, 16px);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.opponent-hover.blue { color: var(--blue); }
+.opponent-hover.red { color: var(--red); }
+
 /* Face simplificada: cantos com Naipe/A */
 .card.face::before,
 .card.face::after {
