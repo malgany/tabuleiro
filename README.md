@@ -5,7 +5,7 @@ Protótipo de jogo de tabuleiro com cartas e turnos, escrito em HTML, CSS e Java
 ## Como executar
 
 1. Não há dependências.
-2. Basta abrir `index.html` em um navegador moderno.
+2. Abra `map.html` em um navegador moderno. O botão **Jogar** leva ao tabuleiro em `index.html`.
 
 ## Sobre o jogo
 
@@ -15,6 +15,8 @@ Protótipo de jogo de tabuleiro com cartas e turnos, escrito em HTML, CSS e Java
 
 ## Estrutura
 
+- `map.html`: mapa de fases com indicação do estágio atual.
+- `js/map.js`: renderização do mapa e controle do estágio.
 - `index.html`: marcação principal do tabuleiro.
 - Diretório `css/`: estilos da interface.
 - `js/main.js`: lógica de jogo e controle de turnos.
