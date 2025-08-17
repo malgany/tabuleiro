@@ -15,7 +15,7 @@ import * as ui from './ui.js';
 
 const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer } = ui;
 import { getRandomItems } from './config.js';
-import { showOverlay } from './overlay.js';
+import { showOverlay, showPopup } from './overlay.js';
 
 export function checkGameOver() {
   if (units.blue.pv <= 0) ui.gameOver('derrota');
@@ -23,10 +23,14 @@ export function checkGameOver() {
 }
 
 export async function startBattle() {
-  showOverlay('Desafio contra vermelho', { duration: 3000 });
+  const overlay = showOverlay('Desafio contra vermelho', { persist: true });
   for (let i = 3; i > 0; i--) {
+    overlay.textContent = String(i);
     await new Promise(r => setTimeout(r, 1000));
   }
+  overlay.classList.add('fade-out');
+  setTimeout(() => overlay.remove(), 300);
+  showPopup('Turno do jogador azul');
   startTurnTimer();
 }
 
