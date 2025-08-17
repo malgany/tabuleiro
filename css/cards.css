@@ -175,3 +175,16 @@
   content: var(--pip);
 }
 
+@keyframes shake {
+  0%, 100% { transform: translate(-50%, -50%); }
+  25% { transform: translate(calc(-50% - 4px), -50%); }
+  75% { transform: translate(calc(-50% + 4px), -50%); }
+}
+
+.unit.shake {
+  animation: shake 0.3s;
+}
+
+.float-text.pa { color: var(--blue); }
+.float-text.pv { color: var(--red); }
+

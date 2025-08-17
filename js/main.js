@@ -11,6 +11,28 @@ import {
 } from './units.js';
 import { initUI, updateBluePanel, initEnemyTooltip, uiState } from './ui.js';
 
+function showFloatingText(targetEl, text, type) {
+  const el = document.createElement('span');
+  el.className = `float-text ${type}`;
+  el.textContent = text;
+  document.body.appendChild(el);
+  const rect = targetEl.getBoundingClientRect();
+  el.style.position = 'absolute';
+  el.style.left = `${rect.left + rect.width / 2 + window.scrollX}px`;
+  el.style.top = `${rect.top + window.scrollY}px`;
+  el.style.transform = 'translate(-50%, -50%)';
+  setTimeout(() => {
+    el.remove();
+  }, 500);
+}
+
+function animateAttack(attacker, defender) {
+  defender.el.classList.add('shake');
+  setTimeout(() => defender.el.classList.remove('shake'), 300);
+  showFloatingText(attacker.el, '-3', 'pa');
+  showFloatingText(defender.el, '-2', 'pv');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   if (!grid) return;
@@ -59,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const c = Number(cell.dataset.col);
       const enemy = getInactive();
       if (enemy.pos.row === r && enemy.pos.col === c && active.pa >= 3) {
+        animateAttack(active, enemy);
         active.pa -= 3;
         enemy.pv -= 2;
         updateBluePanel(units.blue);
