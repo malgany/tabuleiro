@@ -3,20 +3,17 @@ import {
   getActive,
   setActiveId,
   clearReachable,
-  showReachableFor,
+  showSocoAlcance as showSocoAlcanceUnits,
+  clearSocoAlcance as clearSocoAlcanceUnits,
 } from './units.js';
 
 function showSocoAlcance() {
   const active = getActive();
-  showReachableFor({
-    pos: active.pos,
-    pm: 1,
-    allow: () => true,
-  });
+  showSocoAlcanceUnits(active);
 }
 
 function clearSocoAlcance() {
-  clearReachable();
+  clearSocoAlcanceUnits();
 }
 
 let bluePanelRefs = null;

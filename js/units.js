@@ -1,4 +1,4 @@
-import { ROWS, COLS, rowColToIndex } from './board-utils.js';
+import { ROWS, COLS, rowColToIndex, isInside } from './board-utils.js';
 import { computeReachable } from './pathfinding.js';
 
 let cards = [];
@@ -83,4 +83,27 @@ export function showReachableFor(unit) {
       }
     }
   }
+}
+
+export function clearSocoAlcance() {
+  cards.forEach(c => c.classList.remove('attackable'));
+}
+
+export function showSocoAlcance(unit) {
+  clearSocoAlcance();
+  const { row, col } = unit.pos;
+  const deltas = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+  deltas.forEach(([dr, dc]) => {
+    const r = row + dr;
+    const c = col + dc;
+    if (!isInside(r, c)) return;
+    const idx = rowColToIndex(r, c);
+    const card = cards[idx];
+    if (card) card.classList.add('attackable');
+  });
 }
