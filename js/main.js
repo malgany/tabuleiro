@@ -8,8 +8,18 @@ import {
   showReachableFor,
   mountUnit,
   clearSocoAlcance,
+  showFloatingText,
 } from './units.js';
 import { initUI, updateBluePanel, initEnemyTooltip, uiState } from './ui.js';
+
+async function moveUnitAlongPath(unit, path, cost) {
+  for (const step of path.slice(1)) {
+    unit.pos = step;
+    mountUnit(unit);
+    await new Promise(r => setTimeout(r, 150));
+  }
+  showFloatingText(unit.el, `-${cost}`, 'pm');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
@@ -47,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showReachableFor(units.red);
   });
 
-  grid.addEventListener('click', (ev) => {
+  grid.addEventListener('click', async (ev) => {
     const target = ev.target;
     if (!(target instanceof HTMLElement)) return;
     const cell = target.closest('.card');
@@ -82,8 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!Number.isFinite(cost) || cost <= 0 || cost > active.pm) return;
 
     active.pm -= cost;
-    active.pos = { row: r, col: c };
-    mountUnit(active);
+    await moveUnitAlongPath(active, path, cost);
     updateBluePanel(units.blue);
 
     // Atualiza destaque conforme PM restante
