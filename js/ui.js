@@ -80,7 +80,7 @@ export function gameOver(result) {
         const board = document.getElementById('board-screen');
         const map = document.getElementById('map-screen');
         if (board) board.style.display = 'none';
-        if (map) map.style.display = 'block';
+        if (map) map.style.display = '';
         window.location.reload();
       },
       { once: true },
