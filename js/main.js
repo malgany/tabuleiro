@@ -45,7 +45,7 @@ export async function startBattle() {
   });
 }
 
-async function moveUnitAlongPath(unit, path, cost) {
+export async function moveUnitAlongPath(unit, path, cost) {
   if (path.length < 2) {
     showFloatingText(unit, `-${cost}`, 'pm');
     return;
@@ -68,9 +68,18 @@ async function moveUnitAlongPath(unit, path, cost) {
   unit.pos = dest;
   unit.x = endX;
   unit.y = endY;
-  unit.el.style.left = `${endX}px`;
-  unit.el.style.top = `${endY}px`;
-  unit.el.style.transform = 'translate(-50%, -50%)';
+
+  // Temporarily disable transform transitions to avoid a second animation
+  const el = unit.el;
+  const prevTransition = el.style.transition;
+  el.style.transition = 'none';
+  el.style.left = `${endX}px`;
+  el.style.top = `${endY}px`;
+  el.style.transform = 'translate(-50%, -50%)';
+  // Force reflow so the transition reset takes effect
+  void el.offsetWidth;
+  el.style.transition = prevTransition;
+
   showFloatingText(unit, `-${cost}`, 'pm');
 }
 
