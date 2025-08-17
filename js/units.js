@@ -107,3 +107,17 @@ export function showSocoAlcance(unit) {
     if (card) card.classList.add('attackable');
   });
 }
+
+export function showFloatingText(el, text, className = '') {
+  const span = document.createElement('span');
+  span.className = `float-text${className ? ` ${className}` : ''}`;
+  span.textContent = text;
+  el.appendChild(span);
+  span.addEventListener(
+    'animationend',
+    () => {
+      span.remove();
+    },
+    { once: true }
+  );
+}
