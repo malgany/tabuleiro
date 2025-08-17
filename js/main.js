@@ -10,9 +10,16 @@ import {
   clearSocoAlcance,
   showFloatingText,
 } from './units.js';
-import { initUI, updateBluePanel, initEnemyTooltip, uiState, startTurnTimer } from './ui.js';
+import * as ui from './ui.js';
+
+const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer } = ui;
 
 let overlayEl = null;
+
+export function checkGameOver() {
+  if (units.blue.pv <= 0) ui.gameOver('derrota');
+  else if (units.red.pv <= 0) ui.gameOver('vitoria');
+}
 
 export function showOverlay(text = '') {
   if (!overlayEl) {
@@ -92,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!cell) return;
 
     const active = getActive();
-    if (uiState.socoSelecionado && cell.classList.contains('attackable')) {
+    if (ui.uiState.socoSelecionado && cell.classList.contains('attackable')) {
       const r = Number(cell.dataset.row);
       const c = Number(cell.dataset.col);
       const enemy = getInactive();
@@ -104,9 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
         await animateAttack(active, enemy, paCost, damage);
         updateBluePanel(units.blue);
         mountUnit(enemy);
+        checkGameOver();
       }
-      uiState.socoSelecionado = false;
-      uiState.socoSlot.classList.remove('is-selected');
+      ui.uiState.socoSelecionado = false;
+      ui.uiState.socoSlot.classList.remove('is-selected');
       clearSocoAlcance();
       return;
     }

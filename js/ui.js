@@ -7,6 +7,7 @@ import {
   clearSocoAlcance as clearSocoAlcanceUnits,
 } from './units.js';
 import { showOverlay, showPopup } from './overlay.js';
+import { checkGameOver } from './main.js';
 
 export const uiState = {
   socoSlot: null,
@@ -63,6 +64,12 @@ export function stopTurnTimer() {
   }
 }
 
+export function gameOver(result) {
+  stopTurnTimer();
+  const msg = result === 'vitoria' ? 'Vitória!' : 'Derrota!';
+  showOverlay(msg);
+}
+
 export function passTurn() {
   const finished = getActive();
   finished.pm = 3;
@@ -75,7 +82,10 @@ export function passTurn() {
   });
   clearReachable();
   updateBluePanel(units.blue);
-  startTurnTimer();
+  checkGameOver();
+  if (units.blue.pv > 0 && units.red.pv > 0) {
+    startTurnTimer();
+  }
 }
 
 export function initUI() {
