@@ -108,7 +108,9 @@ export function showSocoAlcance(unit) {
   });
 }
 
-export function showFloatingText(el, text, className = '') {
+export function showFloatingText(target, text, className = '') {
+  const el = target?.el ?? target;
+  if (!el) return;
   const span = document.createElement('span');
   span.className = `float-text${className ? ` ${className}` : ''}`;
   span.textContent = text;
