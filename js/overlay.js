@@ -1,4 +1,4 @@
-export function showOverlay(msg, { duration = 2000, persist = false } = {}) {
+export function showOverlay(msg = '', { duration = 2000, persist = false } = {}) {
   const el = document.createElement('div');
   el.className = 'overlay';
   el.textContent = msg;

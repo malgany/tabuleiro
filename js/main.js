@@ -12,21 +12,10 @@ import {
 } from './units.js';
 import { initUI, updateBluePanel, initEnemyTooltip, uiState, startTurnTimer } from './ui.js';
 import { getRandomItems } from './config.js';
-
-let overlayEl = null;
-
-export function showOverlay(text = '') {
-  if (!overlayEl) {
-    overlayEl = document.createElement('div');
-    overlayEl.className = 'overlay';
-    document.body.appendChild(overlayEl);
-  }
-  overlayEl.textContent = text;
-  overlayEl.style.display = 'flex';
-}
+import { showOverlay } from './overlay.js';
 
 export async function startBattle() {
-  showOverlay('Desafio contra vermelho');
+  showOverlay('Desafio contra vermelho', { duration: 3000 });
   for (let i = 3; i > 0; i--) {
     await new Promise(r => setTimeout(r, 1000));
   }
@@ -163,3 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('[Tabuleiro] Unidades inicializadas', units);
 });
+
+export { showOverlay };
