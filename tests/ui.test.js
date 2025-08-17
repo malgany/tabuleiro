@@ -45,6 +45,7 @@ describe('passTurn', () => {
 describe('startBattle', () => {
   afterEach(() => {
     stopTurnTimer();
+    document.body.innerHTML = '';
   });
 
   test('timer starts only after countdown', async () => {
@@ -54,5 +55,14 @@ describe('startBattle', () => {
     await new Promise(r => setTimeout(r, 3100));
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
+  }, 10000);
+
+  test('displays popup for blue turn at top-left', async () => {
+    startBattle();
+    await new Promise(r => setTimeout(r, 3100));
+    const popup = document.querySelector('.popup');
+    expect(popup).not.toBeNull();
+    expect(popup.textContent).toBe('Iniciando turno do jogador azul');
+    expect(document.querySelector('.popup-container.top-left')).not.toBeNull();
   }, 10000);
 });
