@@ -98,6 +98,8 @@ export function gameOver(result) {
               const stageKey = 'stage';
               const stage = Number(localStorage.getItem(stageKey)) || 0;
               localStorage.setItem(stageKey, String(stage + 1));
+              const playedKey = 'played';
+              localStorage.setItem(playedKey, 'true');
               const boardScreen = document.getElementById('board-screen');
               const mapScreen = document.getElementById('map-screen');
               if (boardScreen) boardScreen.style.display = 'none';
