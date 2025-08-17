@@ -98,7 +98,7 @@ async function animateAttack(attacker, defender, paCost, damage) {
 export function gameOver(result) {
   if (result !== 'vitoria') return;
   ui.stopTurnTimer();
-  const overlay = showOverlay('Vitória!', { persist: true });
+  const overlay = showOverlay('Vitória!', { duration: 3000 });
   units.red.el?.remove();
   setTimeout(() => {
     const board = document.querySelector('.board');
@@ -116,9 +116,6 @@ export function gameOver(result) {
     chest.addEventListener(
       'click',
       () => {
-        overlay.classList.add('fade-out');
-        setTimeout(() => overlay.remove(), 300);
-
         const loot = document.createElement('div');
         loot.className = 'loot';
         const items = getRandomItems(3);
