@@ -36,6 +36,12 @@
   background-color: rgba(16, 185, 129, 0.25);
 }
 
+.card.attackable {
+  outline: 3px solid rgba(59,130,246,.85);
+  outline-offset: -3px;
+  background-color: rgba(59,130,246,.25);
+}
+
 /* Diferenciar unidades e turno ativo */
 .unit.unit-blue { background: rgba(29, 78, 216, 0.9); }
 .unit.unit-red { background: rgba(220, 38, 38, 0.9); }
