@@ -19,7 +19,7 @@ import { showOverlay, showPopup } from './overlay.js';
 
 export function checkGameOver() {
   if (units.blue.pv <= 0) ui.gameOver('derrota');
-  else if (units.red.pv <= 0) ui.gameOver('vitoria');
+  else if (units.red.pv <= 0) gameOver('vitoria');
 }
 
 export async function startBattle() {
@@ -57,6 +57,8 @@ async function animateAttack(attacker, defender, paCost, damage) {
 
 export function gameOver(result) {
   if (result !== 'vitoria') return;
+  ui.stopTurnTimer();
+  const overlay = showOverlay('Vitória!', { persist: true });
   units.red.el?.remove();
   setTimeout(() => {
     const board = document.querySelector('.board');
@@ -69,6 +71,9 @@ export function gameOver(result) {
     chest.addEventListener(
       'click',
       () => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => overlay.remove(), 300);
+
         const loot = document.createElement('div');
         loot.className = 'loot';
         const items = getRandomItems(3);
