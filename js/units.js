@@ -2,6 +2,7 @@ import { ROWS, COLS, rowColToIndex, isInside } from './board-utils.js';
 import { computeReachable } from './pathfinding.js';
 
 let cards = [];
+let board = null;
 
 export const units = {
   blue: {
@@ -10,6 +11,8 @@ export const units = {
     pm: 3,
     pa: 6,
     pos: { row: 5, col: 3 },
+    x: 0,
+    y: 0,
     allow: null,
     el: null,
   },
@@ -19,6 +22,8 @@ export const units = {
     pm: 3,
     pa: 6,
     pos: { row: 0, col: 0 },
+    x: 0,
+    y: 0,
     allow: null,
     el: null,
   },
@@ -34,6 +39,7 @@ export function setActiveId(id) {
 
 export function initUnits(cardEls, isBlue, isRed) {
   cards = cardEls;
+  board = document.querySelector('.board') || document.body;
   units.blue.allow = isBlue;
   units.red.allow = isRed;
   units.blue.el = createUnitEl('blue');
@@ -50,11 +56,29 @@ export function createUnitEl(id) {
   return el;
 }
 
-export function mountUnit(unit) {
-  const idx = rowColToIndex(unit.pos.row, unit.pos.col);
+export function getCoords(row, col) {
+  const idx = rowColToIndex(row, col);
   const host = cards[idx];
-  if (!host) return;
-  host.appendChild(unit.el);
+  if (!host || !board) return { x: 0, y: 0, size: 0 };
+  const boardRect = board.getBoundingClientRect();
+  const rect = host.getBoundingClientRect();
+  const x = rect.left - boardRect.left + rect.width / 2;
+  const y = rect.top - boardRect.top + rect.height / 2;
+  const size = rect.width * 0.6;
+  return { x, y, size };
+}
+
+export function mountUnit(unit) {
+  if (!board) return;
+  const { x, y, size } = getCoords(unit.pos.row, unit.pos.col);
+  unit.x = x;
+  unit.y = y;
+  unit.el.style.width = `${size}px`;
+  unit.el.style.height = `${size}px`;
+  unit.el.style.left = `${x}px`;
+  unit.el.style.top = `${y}px`;
+  unit.el.style.transform = 'translate(-50%, -50%)';
+  if (unit.el.parentElement !== board) board.appendChild(unit.el);
 }
 
 export function reflectActiveStyles() {
