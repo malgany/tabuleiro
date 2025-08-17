@@ -6,6 +6,7 @@ import {
   showSocoAlcance as showSocoAlcanceUnits,
   clearSocoAlcance as clearSocoAlcanceUnits,
 } from './units.js';
+import { showOverlay, showPopup } from './overlay.js';
 
 export const uiState = {
   socoSlot: null,
@@ -68,6 +69,10 @@ export function passTurn() {
   finished.pa = 6;
   const next = finished.id === 'blue' ? 'red' : 'blue';
   setActiveId(next);
+  showPopup(`Iniciando turno do jogador ${next}`, {
+    corner: 'top-left',
+    duration: 1000,
+  });
   clearReachable();
   updateBluePanel(units.blue);
   startTurnTimer();
@@ -159,3 +164,5 @@ export function initEnemyTooltip() {
     enemyTooltip.style.display = 'none';
   });
 }
+
+export { showOverlay, showPopup };
