@@ -59,6 +59,10 @@
   gap: 6px;
 }
 
+.metrics .pv { color:#ef4444; }
+.metrics .pa { color:#3b82f6; }
+.metrics .pm { color:#10b981; }
+
 .pass-btn {
   appearance: none;
   border: 0;
