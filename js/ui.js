@@ -25,7 +25,7 @@ let bluePanelRefs = null;
 
 export function updateBluePanel(state) {
   if (!bluePanelRefs) return;
-  bluePanelRefs.pv.textContent = `${state.pv}/10`;
+  bluePanelRefs.pv.textContent = `${state.pv}`;
   bluePanelRefs.pa.textContent = `${state.pa}`;
   bluePanelRefs.pm.textContent = `${state.pm}`;
 }
@@ -107,9 +107,9 @@ export function initUI() {
   const metrics = document.createElement('div');
   metrics.className = 'metrics';
   metrics.innerHTML = `
-      <div class="metric"><span class="k">PV</span><span class="v pv"></span></div>
-      <div class="metric"><span class="k">PA</span><span class="v pa"></span></div>
-      <div class="metric"><span class="k">PM</span><span class="v pm"></span></div>
+      <div class="metric">❤️ <span class="v pv"></span> /10</div>
+      <div class="metric">⭐ <span class="v pa"></span></div>
+      <div class="metric">🥾 <span class="v pm"></span></div>
     `;
 
   passBtn = document.createElement('button');
