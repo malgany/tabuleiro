@@ -16,7 +16,7 @@ async function moveUnitAlongPath(unit, path, cost) {
   for (const step of path.slice(1)) {
     unit.pos = step;
     mountUnit(unit);
-    await new Promise(r => setTimeout(r, 150));
+    await new Promise(r => setTimeout(r, 300));
   }
   showFloatingText(unit, `-${cost}`, 'pm');
 }
