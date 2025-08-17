@@ -27,6 +27,15 @@ async function animateAttack(attacker, defender, paCost, damage) {
   await new Promise(r => setTimeout(r, 600));
 }
 
+function animateAttack(attacker, defender) {
+  defender.el.classList.add('shake');
+  setTimeout(() => {
+    defender.el.classList.remove('shake');
+  }, 300);
+  showFloatingText(attacker.el, '-3', 'pa');
+  showFloatingText(defender.el, '-2', 'pv');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   if (!grid) return;

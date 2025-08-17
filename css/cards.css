@@ -29,6 +29,10 @@
   cursor: pointer;
 }
 
+.unit.shake {
+  animation: shake 0.3s;
+}
+
 /* Alcance (células verdes) */
 .card.reachable {
   outline: 3px solid rgba(16, 185, 129, 0.85);
@@ -189,11 +193,23 @@
 }
 
 .float-text.pa {
-  color: #f59e0b;
+  color: #3b82f6;
 }
 
 .float-text.pv {
   color: #dc2626;
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  25% {
+    transform: translate(calc(-50% + 4px), -50%);
+  }
+  75% {
+    transform: translate(calc(-50% - 4px), -50%);
+  }
 }
 
 @keyframes fadeUp {
