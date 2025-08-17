@@ -19,6 +19,7 @@ describe('gameOver victory chest', () => {
 
   afterEach(() => {
     jest.useRealTimers();
+    jest.restoreAllMocks();
     document.body.innerHTML = '';
   });
 
@@ -40,6 +41,23 @@ describe('gameOver victory chest', () => {
     chest.dispatchEvent(new Event('click'));
     const items = document.querySelectorAll('.loot-item');
     expect(items.length).toBe(3);
+  });
+
+  test('loot items have effect as title attribute', () => {
+    jest
+      .spyOn(Math, 'random')
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0.2)
+      .mockReturnValueOnce(0.4);
+    gameOver('vitoria');
+    jest.advanceTimersByTime(1000);
+    document.querySelector('.chest')?.dispatchEvent(new Event('click'));
+    const items = Array.from(document.querySelectorAll('.loot-item'));
+    expect(items.map(i => i.title)).toEqual([
+      'Cura 2 PV',
+      'Aumenta ataque em 3',
+      'Aumenta ataque em 4',
+    ]);
   });
 
   test('selecting an item applies effect and advances stage', () => {
