@@ -11,6 +11,7 @@ import {
   showFloatingText,
 } from './units.js';
 import { initUI, updateBluePanel, initEnemyTooltip, uiState, startTurnTimer } from './ui.js';
+import { getRandomItems } from './config.js';
 
 let overlayEl = null;
 
@@ -49,6 +50,36 @@ async function animateAttack(attacker, defender, paCost, damage) {
   showFloatingText(attacker, `-${paCost}`, 'pa');
   showFloatingText(defender, `-${damage}`, 'pv');
   await new Promise(r => setTimeout(r, 600));
+}
+
+export function gameOver(result) {
+  if (result !== 'vitoria') return;
+  units.red.el?.remove();
+  setTimeout(() => {
+    const board = document.querySelector('.board');
+    if (!board) return;
+    const chest = document.createElement('div');
+    chest.className = 'chest';
+    chest.innerHTML = '<div class="lid"></div><div class="box"></div>';
+    board.appendChild(chest);
+
+    chest.addEventListener(
+      'click',
+      () => {
+        const loot = document.createElement('div');
+        loot.className = 'loot';
+        const items = getRandomItems(3);
+        items.forEach(it => {
+          const el = document.createElement('div');
+          el.className = 'loot-item';
+          el.textContent = it.icon || it.id;
+          loot.appendChild(el);
+        });
+        board.appendChild(loot);
+      },
+      { once: true }
+    );
+  }, 1000);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
