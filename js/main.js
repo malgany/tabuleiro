@@ -22,18 +22,13 @@ async function moveUnitAlongPath(unit, path, cost) {
 }
 
 async function animateAttack(attacker, defender, paCost, damage) {
-  showFloatingText(attacker, `-${paCost}`, 'pa');
-  showFloatingText(defender, `-${damage}`, 'pv');
-  await new Promise(r => setTimeout(r, 600));
-}
-
-function animateAttack(attacker, defender) {
   defender.el.classList.add('shake');
   setTimeout(() => {
     defender.el.classList.remove('shake');
   }, 300);
-  showFloatingText(attacker.el, '-3', 'pa');
-  showFloatingText(defender.el, '-2', 'pv');
+  showFloatingText(attacker, `-${paCost}`, 'pa');
+  showFloatingText(defender, `-${damage}`, 'pv');
+  await new Promise(r => setTimeout(r, 600));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
