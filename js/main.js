@@ -9,6 +9,7 @@ import {
   mountUnit,
   clearSocoAlcance,
   showFloatingText,
+  getCoords,
 } from './units.js';
 
 import * as ui from './ui.js';
@@ -37,11 +38,31 @@ export async function startBattle() {
 }
 
 async function moveUnitAlongPath(unit, path, cost) {
-  for (const step of path.slice(1)) {
-    unit.pos = step;
-    mountUnit(unit);
-    await new Promise(r => setTimeout(r, 300));
+  if (path.length < 2) {
+    showFloatingText(unit, `-${cost}`, 'pm');
+    return;
   }
+  const dest = path[path.length - 1];
+  const { x: endX, y: endY } = getCoords(dest.row, dest.col);
+  const dx = endX - unit.x;
+  const dy = endY - unit.y;
+
+  await new Promise(resolve => {
+    if (dx === 0 && dy === 0) {
+      resolve();
+      return;
+    }
+    const handler = () => resolve();
+    unit.el.addEventListener('transitionend', handler, { once: true });
+    unit.el.style.transform = `translate(-50%, -50%) translate(${dx}px, ${dy}px)`;
+  });
+
+  unit.pos = dest;
+  unit.x = endX;
+  unit.y = endY;
+  unit.el.style.left = `${endX}px`;
+  unit.el.style.top = `${endY}px`;
+  unit.el.style.transform = 'translate(-50%, -50%)';
   showFloatingText(unit, `-${cost}`, 'pm');
 }
 
