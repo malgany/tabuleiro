@@ -58,7 +58,7 @@ if (current) {
 playBtn.addEventListener('click', () => {
   localStorage.setItem(stageKey, stage);
   if (mapScreen) mapScreen.style.display = 'none';
-  if (boardScreen) boardScreen.style.display = 'block';
+  if (boardScreen) boardScreen.style.display = '';
   showOverlay();
   startBattle();
 });

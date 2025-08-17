@@ -157,7 +157,7 @@ export function gameOver(result) {
               const boardScreen = document.getElementById('board-screen');
               const mapScreen = document.getElementById('map-screen');
               if (boardScreen) boardScreen.style.display = 'none';
-              if (mapScreen) mapScreen.style.display = 'block';
+              if (mapScreen) mapScreen.style.display = '';
             },
             { once: true },
           );
