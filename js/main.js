@@ -18,7 +18,13 @@ async function moveUnitAlongPath(unit, path, cost) {
     mountUnit(unit);
     await new Promise(r => setTimeout(r, 150));
   }
-  showFloatingText(unit.el, `-${cost}`, 'pm');
+  showFloatingText(unit, `-${cost}`, 'pm');
+}
+
+async function animateAttack(attacker, defender, paCost, damage) {
+  showFloatingText(attacker, `-${paCost}`, 'pa');
+  showFloatingText(defender, `-${damage}`, 'pv');
+  await new Promise(r => setTimeout(r, 600));
 }
 
 function animateAttack(attacker, defender) {
@@ -57,13 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initEnemyTooltip();
   initUI();
 
-  units.blue.el.addEventListener('mouseenter', () => {
-    if (getActive().id !== 'blue') return;
-    showReachableFor(units.blue);
-  });
-  units.red.el.addEventListener('mouseenter', () => {
-    if (getActive().id !== 'red') return;
-    showReachableFor(units.red);
+  Object.values(units).forEach(u => {
+    u.el.addEventListener('mouseenter', () => {
+      if (getActive().id !== u.id) return;
+      showReachableFor(u);
+    });
   });
 
   grid.addEventListener('click', async (ev) => {
@@ -78,9 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const c = Number(cell.dataset.col);
       const enemy = getInactive();
       if (enemy.pos.row === r && enemy.pos.col === c && active.pa >= 3) {
-        animateAttack(active, enemy);
-        active.pa -= 3;
-        enemy.pv -= 2;
+        const paCost = 3;
+        const damage = 2;
+        active.pa -= paCost;
+        enemy.pv -= damage;
+        await animateAttack(active, enemy, paCost, damage);
         updateBluePanel(units.blue);
         mountUnit(enemy);
       }
