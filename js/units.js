@@ -78,6 +78,8 @@ export function mountUnit(unit) {
   unit.el.style.left = `${x}px`;
   unit.el.style.top = `${y}px`;
   unit.el.style.transform = 'translate(-50%, -50%)';
+  unit.el.dataset.row = String(unit.pos.row);
+  unit.el.dataset.col = String(unit.pos.col);
   if (unit.el.parentElement !== board) board.appendChild(unit.el);
 }
 

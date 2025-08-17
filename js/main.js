@@ -164,7 +164,8 @@ export function gameOver(result) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
-  if (!grid) return;
+  const boardEl = document.querySelector('.board');
+  if (!grid || !boardEl) return;
 
   const cards = Array.from(grid.children);
   cards.forEach((el, i) => {
@@ -196,16 +197,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  grid.addEventListener('click', async (ev) => {
+  boardEl.addEventListener('click', async ev => {
     const target = ev.target;
     if (!(target instanceof HTMLElement)) return;
-    const cell = target.closest('.card');
-    if (!cell) return;
+    let cell = target.closest('.card');
+    let r, c;
+    if (cell) {
+      r = Number(cell.dataset.row);
+      c = Number(cell.dataset.col);
+    } else {
+      const unitEl = target.closest('.unit');
+      if (unitEl) {
+        r = Number(unitEl.dataset.row);
+        c = Number(unitEl.dataset.col);
+        const idx = rowColToIndex(r, c);
+        cell = cards[idx];
+      }
+    }
+    if (!cell || r === undefined || c === undefined) return;
 
     const active = getActive();
     if (ui.uiState.socoSelecionado && cell.classList.contains('attackable')) {
-      const r = Number(cell.dataset.row);
-      const c = Number(cell.dataset.col);
       const enemy = getInactive();
       if (enemy.pos.row === r && enemy.pos.col === c && active.pa >= 3) {
         const paCost = 3;
@@ -225,8 +237,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!cell.classList.contains('reachable')) return;
 
-    const r = Number(cell.dataset.row);
-    const c = Number(cell.dataset.col);
     const dist = computeReachable(active.pos, active.pm, active.allow);
     const path = buildPath(active.pos, { row: r, col: c }, dist, active.allow);
     if (!path) return;
