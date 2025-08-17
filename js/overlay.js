@@ -1,15 +1,17 @@
-export function showOverlay(msg, { duration = 2000 } = {}) {
+export function showOverlay(msg, { duration = 2000, persist = false } = {}) {
   const el = document.createElement('div');
   el.className = 'overlay';
   el.textContent = msg;
   document.body.appendChild(el);
 
-  setTimeout(() => {
-    el.classList.add('fade-out');
+  if (!persist) {
     setTimeout(() => {
-      el.remove();
-    }, 300);
-  }, duration);
+      el.classList.add('fade-out');
+      setTimeout(() => {
+        el.remove();
+      }, 300);
+    }, duration);
+  }
 
   return el;
 }
