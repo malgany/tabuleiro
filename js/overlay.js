@@ -16,11 +16,11 @@ export function showOverlay(msg = '', { duration = 2000, persist = false } = {})
   return el;
 }
 
-export function showPopup(msg, { duration = 2000 } = {}) {
-  let container = document.querySelector('.popup-container');
+export function showPopup(msg, { duration = 2000, corner = 'top-right' } = {}) {
+  let container = document.querySelector(`.popup-container.${corner}`);
   if (!container) {
     container = document.createElement('div');
-    container.className = 'popup-container';
+    container.className = `popup-container ${corner}`;
     document.body.appendChild(container);
   }
 

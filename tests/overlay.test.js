@@ -22,9 +22,11 @@ describe('overlay helpers', () => {
   });
 
   test('showPopup adds and removes element', () => {
-    showPopup('Oi', { duration: 100 });
+    showPopup('Oi', { duration: 100, corner: 'top-right' });
     expect(document.querySelector('.popup')).not.toBeNull();
-    expect(document.querySelector('.popup-container')).not.toBeNull();
+    expect(
+      document.querySelector('.popup-container.top-right'),
+    ).not.toBeNull();
 
     jest.advanceTimersByTime(100);
     jest.advanceTimersByTime(300);

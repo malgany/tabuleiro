@@ -26,12 +26,34 @@
 
 .popup-container {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   z-index: 1000;
+}
+
+.popup-container.top-right {
+  top: 1rem;
+  right: 1rem;
+  align-items: flex-end;
+}
+
+.popup-container.top-left {
+  top: 1rem;
+  left: 1rem;
+  align-items: flex-start;
+}
+
+.popup-container.bottom-right {
+  bottom: 1rem;
+  right: 1rem;
+  align-items: flex-end;
+}
+
+.popup-container.bottom-left {
+  bottom: 1rem;
+  left: 1rem;
+  align-items: flex-start;
 }
 
 .popup {
