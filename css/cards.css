@@ -188,6 +188,14 @@
   color: #16a34a;
 }
 
+.float-text.pa {
+  color: #f59e0b;
+}
+
+.float-text.pv {
+  color: #dc2626;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 1;
