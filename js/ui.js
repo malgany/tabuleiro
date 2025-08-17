@@ -6,6 +6,7 @@ import {
   showSocoAlcance as showSocoAlcanceUnits,
   clearSocoAlcance as clearSocoAlcanceUnits,
 } from './units.js';
+import { showOverlay, showPopup } from './overlay.js';
 
 export const uiState = {
   socoSlot: null,
@@ -160,3 +161,5 @@ export function initEnemyTooltip() {
     enemyTooltip.style.display = 'none';
   });
 }
+
+export { showOverlay, showPopup };
