@@ -1,5 +1,6 @@
 import { jest } from '@jest/globals';
-const { passTurn, stopTurnTimer, startTurnTimer } = await import('../js/ui.js');
+const uiModule = await import('../js/ui.js');
+const { passTurn, stopTurnTimer, startTurnTimer } = uiModule;
 const { units, setActiveId } = await import('../js/units.js');
 const { startBattle } = await import('../js/main.js');
 
@@ -27,6 +28,13 @@ describe('passTurn', () => {
     units.red.pa = 2;
     passTurn();
     expect(units.red.pa).toBe(6);
+  });
+
+  test('refills PM for the unit that ended its turn', () => {
+    setActiveId('blue');
+    units.blue.pm = 0;
+    passTurn();
+    expect(units.blue.pm).toBe(3);
   });
 
   test('displays popup when passing the turn', () => {
@@ -65,4 +73,24 @@ describe('startBattle', () => {
     expect(popup.textContent).toBe('Iniciando turno do jogador azul');
     expect(document.querySelector('.popup-container.top-left')).not.toBeNull();
   }, 10000);
+});
+
+describe('turn timer', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    stopTurnTimer();
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+
+  test('automatically passes the turn when time runs out', () => {
+    setActiveId('blue');
+    units.blue.pa = 1;
+    startTurnTimer();
+    jest.advanceTimersByTime(30000);
+    expect(units.blue.pa).toBe(6);
+  });
 });

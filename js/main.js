@@ -45,7 +45,7 @@ export async function startBattle() {
   });
 }
 
-async function moveUnitAlongPath(unit, path, cost) {
+export async function moveUnitAlongPath(unit, path, cost) {
   if (path.length < 2) {
     showFloatingText(unit, `-${cost}`, 'pm');
     return;
