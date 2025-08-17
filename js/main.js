@@ -30,8 +30,10 @@ export async function startBattle() {
   }
   overlay.classList.add('fade-out');
   setTimeout(() => overlay.remove(), 300);
-  showPopup('Turno do jogador azul');
   startTurnTimer();
+  showPopup('Iniciando turno do jogador azul', {
+    corner: 'top-left',
+  });
 }
 
 async function moveUnitAlongPath(unit, path, cost) {
