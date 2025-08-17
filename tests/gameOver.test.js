@@ -33,8 +33,8 @@ describe('gameOver victory chest', () => {
   });
 
   test('selecting an item applies effect and advances stage', () => {
-    // Ensure deterministic loot: always pick the first item (sword)
-    jest.spyOn(Math, 'random').mockReturnValue(0);
+    // Ensure deterministic loot: pick the coffee item to restore PA
+    jest.spyOn(Math, 'random').mockReturnValue(0.95);
     units.blue.pa = 6;
     gameOver('vitoria');
     jest.advanceTimersByTime(1000);

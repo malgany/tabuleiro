@@ -1,24 +1,27 @@
-import { ITEMS } from '../js/items.js';
+import { itemsConfig } from '../js/config.js';
 
-describe('ITEMS configuration', () => {
+describe('itemsConfig configuration', () => {
   test('items array contains six objects with required properties', () => {
-    expect(Array.isArray(ITEMS)).toBe(true);
-    expect(ITEMS).toHaveLength(6);
+    expect(Array.isArray(itemsConfig)).toBe(true);
+    expect(itemsConfig).toHaveLength(6);
 
-    for (const it of ITEMS) {
+    for (const it of itemsConfig) {
       expect(typeof it.id).toBe('string');
-      expect(typeof it.emoji).toBe('string');
+      expect(typeof it.icon).toBe('string');
       expect(typeof it.paCost).toBe('number');
       expect(typeof it.damage).toBe('number');
       expect(typeof it.range).toBe('number');
       expect(typeof it.effect).toBe('string');
       expect(typeof it.apply).toBe('function');
+      if (it.extraAttack !== undefined) {
+        expect(typeof it.extraAttack).toBe('boolean');
+      }
     }
   });
 
   test('apply functions modify unit stats accordingly', () => {
     const base = { pv: 10, pa: 5, attack: 1 };
-    const find = id => ITEMS.find(i => i.id === id);
+    const find = id => itemsConfig.find(i => i.id === id);
 
     const u1 = { ...base };
     find('vida+2').apply(u1);
