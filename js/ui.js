@@ -69,6 +69,10 @@ export function passTurn() {
   finished.pa = 6;
   const next = finished.id === 'blue' ? 'red' : 'blue';
   setActiveId(next);
+  showPopup(`Iniciando turno do jogador ${next}`, {
+    corner: 'top-left',
+    duration: 1000,
+  });
   clearReachable();
   updateBluePanel(units.blue);
   startTurnTimer();
