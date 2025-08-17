@@ -1,4 +1,23 @@
-import { units, getActive, setActiveId, clearReachable } from './units.js';
+import {
+  units,
+  getActive,
+  setActiveId,
+  clearReachable,
+  showReachableFor,
+} from './units.js';
+
+function showSocoAlcance() {
+  const active = getActive();
+  showReachableFor({
+    pos: active.pos,
+    pm: 1,
+    allow: () => true,
+  });
+}
+
+function clearSocoAlcance() {
+  clearReachable();
+}
 
 let bluePanelRefs = null;
 
