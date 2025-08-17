@@ -2,7 +2,7 @@ import { jest } from '@jest/globals';
 import { ROWS, COLS } from '../js/board-utils.js';
 import { units, setActiveId } from '../js/units.js';
 import * as ui from '../js/ui.js';
-await import('../js/main.js');
+import { moveUnitAlongPath } from '../js/main.js';
 
 function setupBoard() {
   document.body.innerHTML = '<div class="page"><div class="board"><div class="grid"></div></div></div>';
@@ -35,6 +35,37 @@ describe('soco attack', () => {
   });
 
   test('clicking enemy unit consumes PA and deals damage', async () => {
+    ui.uiState.socoSlot.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    units.red.el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    jest.runAllTimers();
+    await Promise.resolve();
+    expect(units.red.pv).toBe(8);
+    expect(units.blue.pa).toBe(3);
+  });
+
+  test('attack works after units have moved', async () => {
+    let promise = moveUnitAlongPath(
+      units.blue,
+      [
+        { row: 1, col: 0 },
+        { row: 2, col: 0 },
+      ],
+      1,
+    );
+    units.blue.el.dispatchEvent(new Event('transitionend'));
+    await promise;
+
+    promise = moveUnitAlongPath(
+      units.red,
+      [
+        { row: 0, col: 0 },
+        { row: 1, col: 0 },
+      ],
+      1,
+    );
+    units.red.el.dispatchEvent(new Event('transitionend'));
+    await promise;
+
     ui.uiState.socoSlot.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     units.red.el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     jest.runAllTimers();

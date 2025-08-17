@@ -68,6 +68,8 @@ export async function moveUnitAlongPath(unit, path, cost) {
   unit.pos = dest;
   unit.x = endX;
   unit.y = endY;
+  unit.el.dataset.row = String(dest.row);
+  unit.el.dataset.col = String(dest.col);
 
   // Temporarily disable transform transitions to avoid a second animation
   const el = unit.el;
