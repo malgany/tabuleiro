@@ -7,6 +7,11 @@ import {
   clearSocoAlcance as clearSocoAlcanceUnits,
 } from './units.js';
 
+export const uiState = {
+  socoSlot: null,
+  socoSelecionado: false,
+};
+
 function showSocoAlcance() {
   const active = getActive();
   showSocoAlcanceUnits(active);
@@ -79,6 +84,7 @@ export function initUI() {
   }
 
   const socoSlot = slots.children[0];
+  uiState.socoSlot = socoSlot;
   const cardSoco = document.createElement('div');
   cardSoco.className = 'card-soco';
   cardSoco.textContent = '👊';
@@ -87,12 +93,11 @@ export function initUI() {
   atk.textContent = '2';
   cardSoco.appendChild(atk);
   socoSlot.appendChild(cardSoco);
-  let socoSelecionado = false;
   socoSlot.addEventListener('click', () => {
     if (getActive().id !== 'blue') return;
-    socoSelecionado = !socoSelecionado;
-    socoSlot.classList.toggle('is-selected', socoSelecionado);
-    if (socoSelecionado) {
+    uiState.socoSelecionado = !uiState.socoSelecionado;
+    socoSlot.classList.toggle('is-selected', uiState.socoSelecionado);
+    if (uiState.socoSelecionado) {
       showSocoAlcance();
     } else {
       clearSocoAlcance();

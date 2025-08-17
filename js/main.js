@@ -1,7 +1,15 @@
 import { COLS, ROWS, indexToRowCol, rowColToIndex } from './board-utils.js';
 import { computeReachable, buildPath } from './pathfinding.js';
-import { units, initUnits, getActive, showReachableFor, mountUnit } from './units.js';
-import { initUI, updateBluePanel, initEnemyTooltip } from './ui.js';
+import {
+  units,
+  initUnits,
+  getActive,
+  getInactive,
+  showReachableFor,
+  mountUnit,
+  clearSocoAlcance,
+} from './units.js';
+import { initUI, updateBluePanel, initEnemyTooltip, uiState } from './ui.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
@@ -44,11 +52,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!(target instanceof HTMLElement)) return;
     const cell = target.closest('.card');
     if (!cell) return;
+
+    const active = getActive();
+    if (uiState.socoSelecionado && cell.classList.contains('attackable')) {
+      const r = Number(cell.dataset.row);
+      const c = Number(cell.dataset.col);
+      const enemy = getInactive();
+      if (enemy.pos.row === r && enemy.pos.col === c && active.pa >= 3) {
+        active.pa -= 3;
+        enemy.pv -= 2;
+        updateBluePanel(units.blue);
+        mountUnit(enemy);
+      }
+      uiState.socoSelecionado = false;
+      uiState.socoSlot.classList.remove('is-selected');
+      clearSocoAlcance();
+      return;
+    }
+
     if (!cell.classList.contains('reachable')) return;
 
     const r = Number(cell.dataset.row);
     const c = Number(cell.dataset.col);
-    const active = getActive();
     const dist = computeReachable(active.pos, active.pm, active.allow);
     const path = buildPath(active.pos, { row: r, col: c }, dist, active.allow);
     if (!path) return;
