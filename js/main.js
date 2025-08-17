@@ -21,6 +21,15 @@ async function moveUnitAlongPath(unit, path, cost) {
   showFloatingText(unit.el, `-${cost}`, 'pm');
 }
 
+function animateAttack(attacker, defender) {
+  defender.el.classList.add('shake');
+  setTimeout(() => {
+    defender.el.classList.remove('shake');
+  }, 300);
+  showFloatingText(attacker.el, '-3', 'pa');
+  showFloatingText(defender.el, '-2', 'pv');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   if (!grid) return;
@@ -69,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const c = Number(cell.dataset.col);
       const enemy = getInactive();
       if (enemy.pos.row === r && enemy.pos.col === c && active.pa >= 3) {
+        animateAttack(active, enemy);
         active.pa -= 3;
         enemy.pv -= 2;
         updateBluePanel(units.blue);
