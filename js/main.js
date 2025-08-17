@@ -15,6 +15,8 @@ import * as ui from './ui.js';
 
 const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer } = ui;
 import { getRandomItems } from './config.js';
+import { showOverlay } from './overlay.js';
+
 
 let overlayEl = null;
 
@@ -34,7 +36,7 @@ export function showOverlay(text = '') {
 }
 
 export async function startBattle() {
-  showOverlay('Desafio contra vermelho');
+  showOverlay('Desafio contra vermelho', { duration: 3000 });
   for (let i = 3; i > 0; i--) {
     await new Promise(r => setTimeout(r, 1000));
   }
@@ -208,3 +210,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('[Tabuleiro] Unidades inicializadas', units);
 });
+
+export { showOverlay };
