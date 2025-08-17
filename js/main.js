@@ -123,6 +123,7 @@ export function gameOver(result) {
           const el = document.createElement('div');
           el.className = 'loot-item';
           el.textContent = it.icon || it.id;
+          el.title = it.effect;
 
           // When the player chooses an item we apply its effects, update the
           // UI and then transition back to the map screen advancing the stage.
