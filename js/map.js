@@ -1,9 +1,9 @@
 const path = [
-  { x: 80, y: 20 },
-  { x: 80, y: 120 },
-  { x: 80, y: 220 },
-  { x: 80, y: 320 },
   { x: 80, y: 420 },
+  { x: 80, y: 320 },
+  { x: 80, y: 220 },
+  { x: 80, y: 120 },
+  { x: 80, y: 20 },
 ];
 
 const stageKey = 'stage';
@@ -37,8 +37,8 @@ path.forEach((node, idx) => {
     const conn = document.createElement('div');
     conn.className = 'map-connection';
     conn.style.left = `${prev.x + 10}px`;
-    conn.style.top = `${prev.y + 12}px`;
-    conn.style.height = `${node.y - prev.y}px`;
+    conn.style.top = `${Math.min(prev.y, node.y) + 12}px`;
+    conn.style.height = `${Math.abs(node.y - prev.y)}px`;
     container.appendChild(conn);
   }
 });
