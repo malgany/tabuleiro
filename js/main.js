@@ -17,22 +17,9 @@ const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer } = ui;
 import { getRandomItems } from './config.js';
 import { showOverlay } from './overlay.js';
 
-
-let overlayEl = null;
-
 export function checkGameOver() {
   if (units.blue.pv <= 0) ui.gameOver('derrota');
   else if (units.red.pv <= 0) ui.gameOver('vitoria');
-}
-
-export function showOverlay(text = '') {
-  if (!overlayEl) {
-    overlayEl = document.createElement('div');
-    overlayEl.className = 'overlay';
-    document.body.appendChild(overlayEl);
-  }
-  overlayEl.textContent = text;
-  overlayEl.style.display = 'flex';
 }
 
 export async function startBattle() {

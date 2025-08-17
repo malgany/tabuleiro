@@ -175,18 +175,4 @@ export function initEnemyTooltip() {
   });
 }
 
-export function gameOver(resultado) {
-  if (resultado !== 'derrota') return;
-  const overlay = showOverlay('Game Over', { persist: true });
-  const exitBtn = document.createElement('button');
-  exitBtn.textContent = 'Sair';
-  exitBtn.className = 'overlay-btn';
-  overlay.appendChild(exitBtn);
-  exitBtn.addEventListener('click', () => {
-    localStorage.removeItem('stage');
-    localStorage.removeItem('played');
-    window.location.reload();
-  });
-}
-
 export { showOverlay, showPopup };
