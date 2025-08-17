@@ -47,7 +47,7 @@ const playBtn = document.getElementById('play');
 const current = path[stage];
 if (current) {
   playBtn.style.left = `${current.x + 40}px`;
-  playBtn.style.top = `${current.y}px`;
+  playBtn.style.top = `${current.y - 7}px`;
 } else {
   playBtn.disabled = true;
   playBtn.style.display = 'none';
