@@ -66,8 +66,29 @@ export function stopTurnTimer() {
 
 export function gameOver(result) {
   stopTurnTimer();
-  const msg = result === 'vitoria' ? 'Vitória!' : 'Derrota!';
-  showOverlay(msg);
+  if (result === 'derrota') {
+    const overlay = showOverlay('Derrota!', { persist: true });
+    const exitBtn = document.createElement('button');
+    exitBtn.type = 'button';
+    exitBtn.className = 'overlay-btn';
+    exitBtn.textContent = 'Sair';
+    overlay.appendChild(exitBtn);
+    exitBtn.addEventListener(
+      'click',
+      () => {
+        localStorage.clear();
+        const board = document.getElementById('board-screen');
+        const map = document.getElementById('map-screen');
+        if (board) board.style.display = 'none';
+        if (map) map.style.display = 'block';
+        window.location.reload();
+      },
+      { once: true },
+    );
+  } else {
+    const msg = result === 'vitoria' ? 'Vitória!' : 'Derrota!';
+    showOverlay(msg);
+  }
 }
 
 export function passTurn() {

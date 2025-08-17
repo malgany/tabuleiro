@@ -33,7 +33,9 @@ describe('game over logic', () => {
     checkGameOver();
     const overlay = document.querySelector('.overlay');
     expect(overlay).not.toBeNull();
-    expect(overlay.textContent).toBe('Derrota!');
+    expect(overlay?.firstChild?.textContent).toBe('Derrota!');
+    const btn = overlay?.querySelector('button');
+    expect(btn?.textContent).toBe('Sair');
   });
 
   test('passTurn checks for game over (victory)', () => {
@@ -49,7 +51,9 @@ describe('game over logic', () => {
     passTurn();
     const overlay = document.querySelector('.overlay');
     expect(overlay).not.toBeNull();
-    expect(overlay.textContent).toBe('Derrota!');
+    expect(overlay?.firstChild?.textContent).toBe('Derrota!');
+    const btn = overlay?.querySelector('button');
+    expect(btn?.textContent).toBe('Sair');
   });
 });
 
