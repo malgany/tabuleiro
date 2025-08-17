@@ -1,0 +1,41 @@
+export function showOverlay(msg, { duration = 2000 } = {}) {
+  const el = document.createElement('div');
+  el.className = 'overlay';
+  el.textContent = msg;
+  document.body.appendChild(el);
+
+  setTimeout(() => {
+    el.classList.add('fade-out');
+    setTimeout(() => {
+      el.remove();
+    }, 300);
+  }, duration);
+
+  return el;
+}
+
+export function showPopup(msg, { duration = 2000 } = {}) {
+  let container = document.querySelector('.popup-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.className = 'popup-container';
+    document.body.appendChild(container);
+  }
+
+  const popup = document.createElement('div');
+  popup.className = 'popup';
+  popup.textContent = msg;
+  container.appendChild(popup);
+
+  setTimeout(() => {
+    popup.classList.add('fade-out');
+    setTimeout(() => {
+      popup.remove();
+      if (container.childElementCount === 0) {
+        container.remove();
+      }
+    }, 300);
+  }, duration);
+
+  return popup;
+}
