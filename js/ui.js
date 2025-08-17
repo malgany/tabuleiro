@@ -37,6 +37,7 @@ let passBtn = null;
 let timerEl = null;
 
 function updatePassButton() {
+  if (!passBtn || !timerEl) return;
   passBtn.textContent = 'Passar Vez';
   timerEl.textContent = `(${Math.max(0, timeLeft)}s)`;
 }
@@ -61,9 +62,10 @@ export function stopTurnTimer() {
   }
 }
 
-function passTurn() {
+export function passTurn() {
   const finished = getActive();
   finished.pm = 3;
+  finished.pa = 6;
   const next = finished.id === 'blue' ? 'red' : 'blue';
   setActiveId(next);
   clearReachable();
