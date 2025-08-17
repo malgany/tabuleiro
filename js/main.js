@@ -24,6 +24,14 @@ export function checkGameOver() {
 }
 
 export async function startBattle() {
+  // Recalcula a posição das unidades após o tabuleiro ficar visível. Caso os
+  // elementos sejam montados enquanto o tabuleiro está oculto (`display: none`),
+  // `getBoundingClientRect` retorna dimensões zero e as unidades desaparecem.
+  // Montá-las novamente garante que largura, altura e posição sejam atualizadas
+  // corretamente quando a batalha inicia.
+  mountUnit(units.blue);
+  mountUnit(units.red);
+
   const overlay = showOverlay('Desafio contra vermelho', { persist: true });
   for (let i = 3; i > 0; i--) {
     overlay.textContent = String(i);
