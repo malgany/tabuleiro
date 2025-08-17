@@ -22,6 +22,16 @@ describe('gameOver victory chest', () => {
     document.body.innerHTML = '';
   });
 
+  test('overlay does not block chest interaction', () => {
+    gameOver('vitoria');
+    jest.advanceTimersByTime(1000);
+    const overlay = document.querySelector('.overlay');
+    expect(overlay).not.toBeNull();
+    // After the chest appears the overlay should allow pointer events to pass
+    // through so the player can click the chest.
+    expect(overlay?.style.pointerEvents).toBe('none');
+  });
+
   test('shows 3 items after clicking chest', () => {
     gameOver('vitoria');
     jest.advanceTimersByTime(1000);

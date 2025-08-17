@@ -68,6 +68,11 @@ export function gameOver(result) {
     chest.innerHTML = '<div class="lid"></div><div class="box"></div>';
     board.appendChild(chest);
 
+    // Allow the player to click the chest while keeping the victory message on
+    // screen. Without disabling pointer events, the overlay element would sit
+    // above the board and swallow all click interactions, blocking the chest.
+    overlay.style.pointerEvents = 'none';
+
     chest.addEventListener(
       'click',
       () => {
