@@ -10,9 +10,30 @@ import {
   clearSocoAlcance,
   showFloatingText,
 } from './units.js';
-import { initUI, updateBluePanel, initEnemyTooltip, uiState, startTurnTimer } from './ui.js';
+
+import * as ui from './ui.js';
+
+const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer } = ui;
 import { getRandomItems } from './config.js';
 import { showOverlay } from './overlay.js';
+
+
+let overlayEl = null;
+
+export function checkGameOver() {
+  if (units.blue.pv <= 0) ui.gameOver('derrota');
+  else if (units.red.pv <= 0) ui.gameOver('vitoria');
+}
+
+export function showOverlay(text = '') {
+  if (!overlayEl) {
+    overlayEl = document.createElement('div');
+    overlayEl.className = 'overlay';
+    document.body.appendChild(overlayEl);
+  }
+  overlayEl.textContent = text;
+  overlayEl.style.display = 'flex';
+}
 
 export async function startBattle() {
   showOverlay('Desafio contra vermelho', { duration: 3000 });
@@ -62,6 +83,42 @@ export function gameOver(result) {
           const el = document.createElement('div');
           el.className = 'loot-item';
           el.textContent = it.icon || it.id;
+
+          // When the player chooses an item we apply its effects, update the
+          // UI and then transition back to the map screen advancing the stage.
+          el.addEventListener(
+            'click',
+            () => {
+              it.apply?.(units.blue);
+              updateBluePanel(units.blue);
+
+              // If the item grants an additional attack, append a card to the
+              // turn panel so the player can use it on the next battle.
+              if (it.extraAttack) {
+                const slots = document.querySelector('.turn-panel .slots');
+                const empty = Array.from(slots?.children || []).find(
+                  s => s.children.length === 0,
+                );
+                if (empty) {
+                  const card = document.createElement('div');
+                  card.className = 'card-extra';
+                  card.textContent = it.icon || it.id;
+                  empty.appendChild(card);
+                }
+              }
+
+              // Advance stage and show the map screen again
+              const stageKey = 'stage';
+              const stage = Number(localStorage.getItem(stageKey)) || 0;
+              localStorage.setItem(stageKey, String(stage + 1));
+              const boardScreen = document.getElementById('board-screen');
+              const mapScreen = document.getElementById('map-screen');
+              if (boardScreen) boardScreen.style.display = 'none';
+              if (mapScreen) mapScreen.style.display = 'block';
+            },
+            { once: true },
+          );
+
           loot.appendChild(el);
         });
         board.appendChild(loot);
@@ -112,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!cell) return;
 
     const active = getActive();
-    if (uiState.socoSelecionado && cell.classList.contains('attackable')) {
+    if (ui.uiState.socoSelecionado && cell.classList.contains('attackable')) {
       const r = Number(cell.dataset.row);
       const c = Number(cell.dataset.col);
       const enemy = getInactive();
@@ -124,9 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
         await animateAttack(active, enemy, paCost, damage);
         updateBluePanel(units.blue);
         mountUnit(enemy);
+        checkGameOver();
       }
-      uiState.socoSelecionado = false;
-      uiState.socoSlot.classList.remove('is-selected');
+      ui.uiState.socoSelecionado = false;
+      ui.uiState.socoSlot.classList.remove('is-selected');
       clearSocoAlcance();
       return;
     }
