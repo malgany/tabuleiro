@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
-import { passTurn, stopTurnTimer } from '../js/ui.js';
-import { units, setActiveId } from '../js/units.js';
+const { passTurn, stopTurnTimer, startTurnTimer } = await import('../js/ui.js');
+const { units, setActiveId } = await import('../js/units.js');
+const { startBattle } = await import('../js/main.js');
 
 describe('passTurn', () => {
   beforeEach(() => {
@@ -41,3 +42,17 @@ describe('passTurn', () => {
   });
 });
 
+describe('startBattle', () => {
+  afterEach(() => {
+    stopTurnTimer();
+  });
+
+  test('timer starts only after countdown', async () => {
+    const spy = jest.spyOn(global, 'setInterval');
+    startBattle();
+    expect(spy).not.toHaveBeenCalled();
+    await new Promise(r => setTimeout(r, 3100));
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+  }, 10000);
+});

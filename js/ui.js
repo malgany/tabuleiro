@@ -143,7 +143,6 @@ export function initUI() {
   updateBluePanel(units.blue);
 
   passBtn.addEventListener('click', passTurn);
-  startTurnTimer();
 }
 
 export function initEnemyTooltip() {

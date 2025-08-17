@@ -10,7 +10,27 @@ import {
   clearSocoAlcance,
   showFloatingText,
 } from './units.js';
-import { initUI, updateBluePanel, initEnemyTooltip, uiState } from './ui.js';
+import { initUI, updateBluePanel, initEnemyTooltip, uiState, startTurnTimer } from './ui.js';
+
+let overlayEl = null;
+
+export function showOverlay(text = '') {
+  if (!overlayEl) {
+    overlayEl = document.createElement('div');
+    overlayEl.className = 'overlay';
+    document.body.appendChild(overlayEl);
+  }
+  overlayEl.textContent = text;
+  overlayEl.style.display = 'flex';
+}
+
+export async function startBattle() {
+  showOverlay('Desafio contra vermelho');
+  for (let i = 3; i > 0; i--) {
+    await new Promise(r => setTimeout(r, 1000));
+  }
+  startTurnTimer();
+}
 
 async function moveUnitAlongPath(unit, path, cost) {
   for (const step of path.slice(1)) {

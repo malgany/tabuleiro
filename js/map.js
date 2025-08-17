@@ -43,6 +43,8 @@ path.forEach((node, idx) => {
   }
 });
 
+import { showOverlay, startBattle } from './main.js';
+
 const playBtn = document.getElementById('play');
 const current = path[stage];
 if (current) {
@@ -58,4 +60,6 @@ playBtn.addEventListener('click', () => {
   localStorage.setItem(playedKey, 'true');
   if (mapScreen) mapScreen.style.display = 'none';
   if (boardScreen) boardScreen.style.display = 'block';
+  showOverlay();
+  startBattle();
 });
