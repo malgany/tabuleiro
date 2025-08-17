@@ -15,7 +15,7 @@ if (Number.isNaN(stage)) {
 }
 
 if (localStorage.getItem(playedKey)) {
-  stage += 1;
+  stage = Number(localStorage.getItem(stageKey)) || stage;
   localStorage.removeItem(playedKey);
 }
 
@@ -57,7 +57,6 @@ if (current) {
 
 playBtn.addEventListener('click', () => {
   localStorage.setItem(stageKey, stage);
-  localStorage.setItem(playedKey, 'true');
   if (mapScreen) mapScreen.style.display = 'none';
   if (boardScreen) boardScreen.style.display = 'block';
   showOverlay();
