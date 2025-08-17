@@ -62,6 +62,27 @@ export function initUI() {
     slots.appendChild(slot);
   }
 
+  const socoSlot = slots.children[0];
+  const cardSoco = document.createElement('div');
+  cardSoco.className = 'card-soco';
+  cardSoco.textContent = '👊';
+  const atk = document.createElement('span');
+  atk.className = 'atk';
+  atk.textContent = '2';
+  cardSoco.appendChild(atk);
+  socoSlot.appendChild(cardSoco);
+  let socoSelecionado = false;
+  socoSlot.addEventListener('click', () => {
+    if (getActive().id !== 'blue') return;
+    socoSelecionado = !socoSelecionado;
+    socoSlot.classList.toggle('is-selected', socoSelecionado);
+    if (socoSelecionado) {
+      showSocoAlcance();
+    } else {
+      clearSocoAlcance();
+    }
+  });
+
   const metrics = document.createElement('div');
   metrics.className = 'metrics';
   metrics.innerHTML = `
