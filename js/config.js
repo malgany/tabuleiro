@@ -77,19 +77,6 @@ export const itemsConfig = [
       unit.pv += 3;
     },
   },
-  {
-    id: 'cafe',
-    icon: '☕',
-    paCost: 0,
-    damage: 0,
-    range: 0,
-    effect: 'Restaura 2 PA',
-    consumable: true,
-    usable: false,
-    apply(unit) {
-      unit.pa += 2;
-    },
-  },
 ];
 
 export function getRandomItems(count = 1) {
