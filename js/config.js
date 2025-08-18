@@ -1,8 +1,10 @@
 //
 // Items available as loot in the game. Each entry includes its visual `icon`,
 // action point `paCost`, base `damage`, attack `range`, textual `effect`
-// description and an optional `extraAttack` flag. Every item exposes an
-// `apply` function that mutates the provided unit.
+// description and two metadata flags: `usable` indicates whether the item can
+// be stored in a slot for later use and `consumable` defines if it is removed
+// once used. Every item exposes an `apply` function that mutates the provided
+// unit.
 //
 export const itemsConfig = [
   {
@@ -12,6 +14,8 @@ export const itemsConfig = [
     damage: 0,
     range: 0,
     effect: 'Cura 2 PV',
+    consumable: true,
+    usable: false,
     apply(unit) {
       unit.pv += 2;
     },
@@ -23,10 +27,11 @@ export const itemsConfig = [
     damage: 3,
     range: 1,
     effect: 'Aumenta ataque em 3',
+    consumable: false,
+    usable: true,
     apply(unit) {
       unit.attack = (unit.attack || 0) + 3;
     },
-    extraAttack: true,
   },
   {
     id: 'martelo',
@@ -35,6 +40,8 @@ export const itemsConfig = [
     damage: 4,
     range: 1,
     effect: 'Aumenta ataque em 4',
+    consumable: false,
+    usable: true,
     apply(unit) {
       unit.attack = (unit.attack || 0) + 4;
     },
@@ -46,6 +53,8 @@ export const itemsConfig = [
     damage: 5,
     range: 2,
     effect: 'Causa 5 de dano',
+    consumable: true,
+    usable: true,
     apply(unit) {
       unit.pv -= 5;
     },
@@ -57,6 +66,8 @@ export const itemsConfig = [
     damage: 0,
     range: 0,
     effect: 'Aumenta PV em 3',
+    consumable: false,
+    usable: true,
     apply(unit) {
       unit.pv += 3;
     },
@@ -68,6 +79,8 @@ export const itemsConfig = [
     damage: 0,
     range: 0,
     effect: 'Restaura 2 PA',
+    consumable: true,
+    usable: false,
     apply(unit) {
       unit.pa += 2;
     },
