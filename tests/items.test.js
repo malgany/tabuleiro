@@ -27,10 +27,6 @@ describe('itemsConfig configuration', () => {
     expect(heartTarget.pv).toBe(10);
     expect(heartTarget.pa).toBe(4);
 
-    const u2 = { ...base };
-    find('espada').apply(u2);
-    expect(u2.attack).toBe(base.attack + 3);
-
     const u3 = { ...base };
     find('cafe').apply(u3);
     expect(u3.pa).toBe(base.pa + 2);
@@ -38,5 +34,17 @@ describe('itemsConfig configuration', () => {
     const u4 = { ...base };
     find('bomba').apply(u4);
     expect(u4.pv).toBe(base.pv - 5);
+  });
+
+  test('sword attack deals damage without altering attacker stats', () => {
+    const sword = itemsConfig.find(i => i.id === 'espada');
+    const attacker = { attack: 1, pa: 6 };
+    const enemy = { pv: 10 };
+    sword.apply(attacker);
+    attacker.pa -= sword.paCost;
+    enemy.pv -= sword.damage;
+    expect(enemy.pv).toBe(7);
+    expect(attacker.attack).toBe(1);
+    expect(attacker.pa).toBe(4);
   });
 });

@@ -30,9 +30,10 @@ export const itemsConfig = [
     effect: 'Aumenta ataque em 3',
     consumable: false,
     usable: true,
-    apply(unit) {
-      unit.attack = (unit.attack || 0) + 3;
-    },
+    type: 'attack',
+    // This item no longer alters permanent stats. Damage is applied
+    // dynamically when the attack is performed.
+    apply() {},
   },
   {
     id: 'martelo',

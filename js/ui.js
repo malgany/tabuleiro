@@ -5,6 +5,8 @@ import {
   clearReachable,
   showSocoAlcance as showSocoAlcanceUnits,
   clearSocoAlcance as clearSocoAlcanceUnits,
+  showItemAlcance as showItemAlcanceUnits,
+  clearItemAlcance as clearItemAlcanceUnits,
 } from './units.js';
 import { showOverlay, showPopup } from './overlay.js';
 import { checkGameOver } from './main.js';
@@ -12,6 +14,7 @@ import { checkGameOver } from './main.js';
 export const uiState = {
   socoSlot: null,
   socoSelecionado: false,
+  selectedItem: null,
 };
 
 function showSocoAlcance() {
@@ -21,6 +24,15 @@ function showSocoAlcance() {
 
 function clearSocoAlcance() {
   clearSocoAlcanceUnits();
+}
+
+function showItemAlcance(item) {
+  const active = getActive();
+  showItemAlcanceUnits(active, item);
+}
+
+function clearItemAlcance() {
+  clearItemAlcanceUnits();
 }
 
 let bluePanelRefs = null;
@@ -102,6 +114,9 @@ export function passTurn() {
     duration: 1000,
   });
   clearReachable();
+  uiState.selectedItem?.card?.classList.remove('is-selected');
+  uiState.selectedItem = null;
+  clearItemAlcance();
   updateBluePanel(units.blue);
   checkGameOver();
   if (units.blue.pv > 0 && units.red.pv > 0) {
@@ -189,6 +204,20 @@ export function addItemCard(item) {
   card.title = item.effect;
 
   card.addEventListener('click', () => {
+    if (getActive().id !== 'blue') return;
+    if (item.type === 'attack' && !item.consumable) {
+      if (uiState.selectedItem?.card === card) {
+        card.classList.remove('is-selected');
+        uiState.selectedItem = null;
+        clearItemAlcance();
+      } else {
+        uiState.selectedItem?.card?.classList.remove('is-selected');
+        uiState.selectedItem = { item, card };
+        card.classList.add('is-selected');
+        showItemAlcance(item);
+      }
+      return;
+    }
     if (units.blue.pa < item.paCost) return;
     units.blue.pa -= item.paCost;
     updateBluePanel(units.blue);
@@ -215,6 +244,9 @@ export function resetUI() {
     }
   });
   uiState.socoSelecionado = false;
+  uiState.selectedItem?.card?.classList.remove('is-selected');
+  uiState.selectedItem = null;
+  clearItemAlcance();
   updateBluePanel(units.blue);
 }
 

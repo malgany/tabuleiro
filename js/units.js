@@ -154,6 +154,31 @@ export function showSocoAlcance(unit) {
   });
 }
 
+export function clearItemAlcance() {
+  cards.forEach(c => c.classList.remove('attackable'));
+}
+
+export function showItemAlcance(unit, item) {
+  clearItemAlcance();
+  const { row, col } = unit.pos;
+  const deltas = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+  deltas.forEach(([dr, dc]) => {
+    for (let i = 1; i <= item.range; i++) {
+      const r = row + dr * i;
+      const c = col + dc * i;
+      if (!isInside(r, c)) break;
+      const idx = rowColToIndex(r, c);
+      const card = cards[idx];
+      if (card) card.classList.add('attackable');
+    }
+  });
+}
+
 export function showFloatingText(target, text, className = '') {
   const el = target?.el ?? target;
   if (!el) return;

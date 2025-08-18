@@ -89,9 +89,14 @@ describe('gameOver victory chest', () => {
     expect(card?.textContent).toBe('🗡️');
     expect(units.blue.attack).toBeUndefined();
 
+    // Clicking the card toggles selection but does not change stats
     card?.dispatchEvent(new Event('click'));
-    expect(units.blue.attack).toBe(3);
-    // sword is not consumable, so card remains
+    expect(units.blue.attack).toBeUndefined();
+    expect(ui.uiState.selectedItem?.item.id).toBe('espada');
+
+    // Deselecting keeps the card for later use
+    card?.dispatchEvent(new Event('click'));
+    expect(ui.uiState.selectedItem).toBeNull();
     expect(slots[1].children.length).toBe(1);
   });
 
