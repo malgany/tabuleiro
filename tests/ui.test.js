@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
-const { passTurn, stopTurnTimer, startTurnTimer } = await import('../js/ui.js');
+const { passTurn, stopTurnTimer, startTurnTimer, initUI, addItemCard, uiState } = await import('../js/ui.js');
 const { units, setActiveId } = await import('../js/units.js');
-const { startBattle } = await import('../js/main.js');
+const { startBattle, gameOver } = await import('../js/main.js');
 
 describe('passTurn', () => {
   beforeEach(() => {
@@ -64,5 +64,28 @@ describe('startBattle', () => {
     expect(popup).not.toBeNull();
     expect(popup.textContent).toBe('Iniciando turno do jogador azul');
     expect(document.querySelector('.popup-container.top-left')).not.toBeNull();
+  }, 10000);
+
+  test('startBattle resets UI after game over', async () => {
+    jest.useFakeTimers();
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    addItemCard({ id: 'x', icon: 'x', effect: '', consumable: true });
+    uiState.socoSlot.classList.add('is-selected');
+    uiState.socoSelecionado = true;
+    gameOver('vitoria');
+    jest.advanceTimersByTime(1000);
+    const p = startBattle();
+    const slots = document.querySelectorAll('.turn-panel .slot');
+    expect(slots[0].children.length).toBe(1);
+    expect(slots[0].classList.contains('is-selected')).toBe(false);
+    expect(slots[1].children.length).toBe(0);
+    for (let i = 0; i < 3; i++) {
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+    }
+    await p;
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   }, 10000);
 });

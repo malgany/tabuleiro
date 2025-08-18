@@ -49,6 +49,22 @@ export function initUnits(cardEls, isBlue, isRed) {
   reflectActiveStyles();
 }
 
+export function resetUnits() {
+  units.blue.pos = { row: 5, col: 3 };
+  units.blue.pv = 10;
+  units.blue.pm = 3;
+  units.blue.pa = 6;
+  units.red.pos = { row: 0, col: 0 };
+  units.red.pv = 10;
+  units.red.pm = 3;
+  units.red.pa = 6;
+  Object.values(units).forEach(u => {
+    u.el?.remove();
+    u.el = createUnitEl(u.id);
+  });
+  setActiveId('blue');
+}
+
 export function createUnitEl(id) {
   const el = document.createElement('div');
   el.className = `unit unit-${id}`;

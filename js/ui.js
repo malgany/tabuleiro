@@ -199,6 +199,22 @@ export function addItemCard(item) {
   empty.appendChild(card);
 }
 
+export function resetUI() {
+  const slots = document.querySelectorAll('.turn-panel .slot');
+  slots.forEach((slot, idx) => {
+    if (idx === 0) {
+      const soco = slot.querySelector('.card-soco');
+      slot.innerHTML = '';
+      if (soco) slot.appendChild(soco);
+      slot.classList.remove('is-selected');
+    } else {
+      slot.innerHTML = '';
+    }
+  });
+  uiState.socoSelecionado = false;
+  updateBluePanel(units.blue);
+}
+
 export function initEnemyTooltip() {
   const enemyTooltip = document.createElement('div');
   enemyTooltip.className = 'enemy-tooltip';
