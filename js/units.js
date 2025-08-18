@@ -61,6 +61,10 @@ export function resetUnits() {
   Object.values(units).forEach(u => {
     u.el?.remove();
     u.el = createUnitEl(u.id);
+    u.el.addEventListener('mouseenter', () => {
+      if (getActive().id !== u.id) return;
+      showReachableFor(u);
+    });
   });
   setActiveId('blue');
 }

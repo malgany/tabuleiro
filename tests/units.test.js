@@ -1,4 +1,6 @@
+import { jest } from '@jest/globals';
 import { ROWS, COLS } from '../js/board-utils.js';
+import * as unitsModule from '../js/units.js';
 import {
   units,
   initUnits,
@@ -8,6 +10,7 @@ import {
   showReachableFor,
   showSocoAlcance,
   showFloatingText,
+  resetUnits,
 } from '../js/units.js';
 
 function createCards() {
@@ -70,6 +73,13 @@ describe('units module', () => {
 
     span.dispatchEvent(new Event('animationend'));
     expect(parent.querySelector('span.float-text.test')).toBeNull();
+  });
+
+  test('resetUnits reattaches hover listeners', () => {
+    resetUnits();
+    units.blue.el.dispatchEvent(new Event('mouseenter'));
+    const hasReachable = cards.some(c => c.classList.contains('reachable'));
+    expect(hasReachable).toBe(true);
   });
 });
 
