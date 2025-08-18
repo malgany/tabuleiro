@@ -126,27 +126,17 @@ export function gameOver(result) {
           el.textContent = it.icon || it.id;
           el.title = it.effect;
 
-          // When the player chooses an item we apply its effects, update the
-          // UI and then transition back to the map screen advancing the stage.
+          // When the player chooses an item we either consume it immediately or
+          // move it to an inventory slot, then transition back to the map
+          // screen advancing the stage.
           el.addEventListener(
             'click',
             () => {
-              it.apply?.(units.blue);
-              updateBluePanel(units.blue);
-
-              // If the item grants an additional attack, append a card to the
-              // turn panel so the player can use it on the next battle.
-              if (it.extraAttack) {
-                const slots = document.querySelector('.turn-panel .slots');
-                const empty = Array.from(slots?.children || []).find(
-                  s => s.children.length === 0,
-                );
-                if (empty) {
-                  const card = document.createElement('div');
-                  card.className = 'card-extra';
-                  card.textContent = it.icon || it.id;
-                  empty.appendChild(card);
-                }
+              if (it.consumable && !it.usable) {
+                it.apply?.(units.blue);
+                updateBluePanel(units.blue);
+              } else if (it.usable) {
+                ui.addItemCard(it);
               }
 
               // Advance stage and show the map screen again

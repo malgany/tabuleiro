@@ -176,6 +176,29 @@ export function initUI() {
   passBtn.addEventListener('click', passTurn);
 }
 
+export function addItemCard(item) {
+  const slots = document.querySelector('.turn-panel .slots');
+  const empty = Array.from(slots?.children || []).find(
+    s => s.children.length === 0,
+  );
+  if (!empty) return;
+
+  const card = document.createElement('div');
+  card.className = 'card-item';
+  card.textContent = item.icon || item.id;
+  card.title = item.effect;
+
+  card.addEventListener('click', () => {
+    item.apply?.(units.blue);
+    updateBluePanel(units.blue);
+    if (item.consumable) {
+      card.remove();
+    }
+  });
+
+  empty.appendChild(card);
+}
+
 export function initEnemyTooltip() {
   const enemyTooltip = document.createElement('div');
   enemyTooltip.className = 'enemy-tooltip';

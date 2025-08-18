@@ -13,9 +13,8 @@ describe('itemsConfig configuration', () => {
       expect(typeof it.range).toBe('number');
       expect(typeof it.effect).toBe('string');
       expect(typeof it.apply).toBe('function');
-      if (it.extraAttack !== undefined) {
-        expect(typeof it.extraAttack).toBe('boolean');
-      }
+      expect(typeof it.usable).toBe('boolean');
+      expect(typeof it.consumable).toBe('boolean');
     }
   });
 
