@@ -139,10 +139,10 @@ export function gameOver(result) {
           el.addEventListener(
             'click',
             () => {
-              if (it.consumable && !it.usable) {
+              if (!it.usable) {
                 it.apply?.(units.blue);
                 updateBluePanel(units.blue);
-              } else if (it.usable) {
+              } else {
                 ui.addItemCard(it);
               }
 
