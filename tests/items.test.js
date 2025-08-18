@@ -91,4 +91,12 @@ describe('itemsConfig configuration', () => {
     expect(targets[3].pv).toBe(10);
     expect(bomb.consumable).toBe(true);
   });
+
+  test('shield increases maxPv without healing', () => {
+    const shield = itemsConfig.find(i => i.id === 'escudo');
+    const unit = { pv: 8, maxPv: 10 };
+    shield.apply(unit);
+    expect(unit.maxPv).toBe(13);
+    expect(unit.pv).toBe(8);
+  });
 });
