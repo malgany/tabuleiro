@@ -205,7 +205,7 @@ export function addItemCard(item) {
 
   card.addEventListener('click', () => {
     if (getActive().id !== 'blue') return;
-    if (item.type === 'attack' && !item.consumable) {
+    if (item.type === 'attack') {
       if (uiState.selectedItem?.card === card) {
         card.classList.remove('is-selected');
         uiState.selectedItem = null;

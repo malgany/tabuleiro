@@ -16,6 +16,7 @@ jest.unstable_mockModule('../js/units.js', () => ({
   getCoords,
   resetUnits: jest.fn(),
   getTPatternCells: jest.fn(() => []),
+  getCrossPatternCells: jest.fn(() => []),
 }));
 
 jest.unstable_mockModule('../js/ui.js', () => ({

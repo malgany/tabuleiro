@@ -206,6 +206,24 @@ export function getTPatternCells(unit, enemy) {
   return cells;
 }
 
+export function getCrossPatternCells(center) {
+  const { row, col } = center;
+  const deltas = [
+    [0, 0],
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
+  const cells = [];
+  deltas.forEach(([dr, dc]) => {
+    const r = row + dr;
+    const c = col + dc;
+    if (isInside(r, c)) cells.push({ row: r, col: c });
+  });
+  return cells;
+}
+
 export function showItemAlcance(unit, item) {
   clearItemAlcance();
   if (item.pattern === 'T') {
@@ -216,6 +234,20 @@ export function showItemAlcance(unit, item) {
       const card = cards[idx];
       if (card) card.classList.add('attackable');
     });
+    return;
+  }
+  if (item.pattern === 'cross') {
+    const { row, col } = unit.pos;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const d = Math.abs(r - row) + Math.abs(c - col);
+        if (d <= item.range) {
+          const idx = rowColToIndex(r, c);
+          const card = cards[idx];
+          if (card) card.classList.add('attackable');
+        }
+      }
+    }
     return;
   }
 

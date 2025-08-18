@@ -13,6 +13,7 @@ import {
   getCoords,
   resetUnits,
   getTPatternCells,
+  getCrossPatternCells,
 } from './units.js';
 
 import * as ui from './ui.js';
@@ -241,6 +242,24 @@ document.addEventListener('DOMContentLoaded', () => {
           mountUnit(enemy);
           checkGameOver();
         }
+      } else if (item.pattern === 'cross') {
+        if (active.pa >= item.paCost) {
+          const cells = getCrossPatternCells({ row: r, col: c });
+          active.pa -= item.paCost;
+          showFloatingText(active, `-${item.paCost}`, 'pa');
+          [units.blue, units.red].forEach(u => {
+            if (
+              cells.some(p => p.row === u.pos.row && p.col === u.pos.col)
+            ) {
+              u.pv -= item.damage;
+              showFloatingText(u, `-${item.damage}`, 'pv');
+            }
+          });
+          updateBluePanel(units.blue);
+          mountUnit(units.red);
+          mountUnit(units.blue);
+          checkGameOver();
+        }
       } else if (
         enemy.pos.row === r &&
         enemy.pos.col === c &&
@@ -253,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mountUnit(enemy);
         checkGameOver();
       }
+      if (item.consumable) card.remove();
       card.classList.remove('is-selected');
       ui.uiState.selectedItem = null;
       clearItemAlcance();
