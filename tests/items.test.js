@@ -2,9 +2,9 @@ import { itemsConfig } from '../js/config.js';
 import { getTPatternCells, getCrossPatternCells } from '../js/units.js';
 
 describe('itemsConfig configuration', () => {
-  test('items array contains six objects with required properties', () => {
+  test('items array contains five objects with required properties', () => {
     expect(Array.isArray(itemsConfig)).toBe(true);
-    expect(itemsConfig).toHaveLength(6);
+    expect(itemsConfig).toHaveLength(5);
 
     for (const it of itemsConfig) {
       expect(typeof it.id).toBe('string');
@@ -28,10 +28,6 @@ describe('itemsConfig configuration', () => {
     find('vida+2').apply(heartTarget);
     expect(heartTarget.pv).toBe(10);
     expect(heartTarget.pa).toBe(4);
-
-    const u3 = { ...base };
-    find('cafe').apply(u3);
-    expect(u3.pa).toBe(base.pa + 2);
 
     const u4 = { ...base };
     find('bomba').apply(u4);

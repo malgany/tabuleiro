@@ -60,20 +60,18 @@ describe('gameOver victory chest', () => {
     ]);
   });
 
-  test('selecting a consumable item applies effect and advances stage', () => {
-    // Ensure deterministic loot: pick the coffee item to restore PA
-    jest.spyOn(Math, 'random').mockReturnValue(0.95);
-    units.blue.pa = 6;
+  test('selecting a consumable item stores it and advances stage', () => {
+    // Ensure deterministic loot: pick the healing item
+    jest.spyOn(Math, 'random').mockReturnValue(0);
+    units.blue.pv = 8;
     gameOver('vitoria');
     jest.advanceTimersByTime(1000);
     document.querySelector('.chest')?.dispatchEvent(new Event('click'));
     const lootItem = document.querySelector('.loot-item');
     lootItem?.dispatchEvent(new Event('click'));
     expect(localStorage.getItem('stage')).toBe('1');
-    const paEl = document.querySelector('.pa');
-    expect(paEl?.textContent).toBe('8');
     const slots = document.querySelectorAll('.slot');
-    expect(slots[1].children.length).toBe(0);
+    expect(slots[1].children.length).toBe(1);
   });
 
   test('selecting a usable item stores it in a slot and can be used later', () => {
