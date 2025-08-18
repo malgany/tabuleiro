@@ -70,11 +70,11 @@ export const itemsConfig = [
     paCost: 0,
     damage: 0,
     range: 0,
-    effect: 'Aumenta PV em 3',
-    consumable: false,
-    usable: true,
+    effect: 'Aumenta PV máximo em 3',
+    consumable: true,
+    usable: false,
     apply(unit) {
-      unit.pv += 3;
+      unit.maxPv = (unit.maxPv ?? 10) + 3;
     },
   },
 ];

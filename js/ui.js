@@ -40,6 +40,7 @@ let bluePanelRefs = null;
 export function updateBluePanel(state) {
   if (!bluePanelRefs) return;
   bluePanelRefs.pv.textContent = `${state.pv}`;
+  bluePanelRefs.maxPv.textContent = `${state.maxPv}`;
   bluePanelRefs.pa.textContent = `${state.pa}`;
   bluePanelRefs.pm.textContent = `${state.pm}`;
 }
@@ -160,7 +161,7 @@ export function initUI() {
   const metrics = document.createElement('div');
   metrics.className = 'metrics';
   metrics.innerHTML = `
-      <div class="metric">❤️ <span class="v pv"></span> /10</div>
+      <div class="metric">❤️ <span class="v pv"></span> /<span class="v maxPv"></span></div>
       <div class="metric">⭐ <span class="v pa"></span></div>
       <div class="metric">🥾 <span class="v pm"></span></div>
     `;
@@ -183,6 +184,7 @@ export function initUI() {
 
   bluePanelRefs = {
     pv: metrics.querySelector('.pv'),
+    maxPv: metrics.querySelector('.maxPv'),
     pa: metrics.querySelector('.pa'),
     pm: metrics.querySelector('.pm'),
   };
