@@ -12,6 +12,7 @@ import {
   showFloatingText,
   getCoords,
   resetUnits,
+  getTPatternCells,
 } from './units.js';
 
 import * as ui from './ui.js';
@@ -227,7 +228,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (selected && cell.classList.contains('attackable')) {
       const enemy = getInactive();
       const { item, card } = selected;
-      if (
+      if (item.pattern === 'T') {
+        const cells = getTPatternCells(active, enemy);
+        const hit = cells.some(
+          p => p.row === enemy.pos.row && p.col === enemy.pos.col,
+        );
+        if (hit && active.pa >= item.paCost) {
+          active.pa -= item.paCost;
+          enemy.pv -= item.damage;
+          await animateAttack(active, enemy, item.paCost, item.damage);
+          updateBluePanel(units.blue);
+          mountUnit(enemy);
+          checkGameOver();
+        }
+      } else if (
         enemy.pos.row === r &&
         enemy.pos.col === c &&
         active.pa >= item.paCost

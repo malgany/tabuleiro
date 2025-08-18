@@ -1,4 +1,5 @@
 import { itemsConfig } from '../js/config.js';
+import { getTPatternCells } from '../js/units.js';
 
 describe('itemsConfig configuration', () => {
   test('items array contains six objects with required properties', () => {
@@ -10,7 +11,8 @@ describe('itemsConfig configuration', () => {
       expect(typeof it.icon).toBe('string');
       expect(typeof it.paCost).toBe('number');
       expect(typeof it.damage).toBe('number');
-      expect(typeof it.range).toBe('number');
+      if ('range' in it) expect(typeof it.range).toBe('number');
+      if ('pattern' in it) expect(typeof it.pattern).toBe('string');
       expect(typeof it.effect).toBe('string');
       expect(typeof it.apply).toBe('function');
       expect(typeof it.usable).toBe('boolean');
@@ -46,5 +48,27 @@ describe('itemsConfig configuration', () => {
     expect(enemy.pv).toBe(7);
     expect(attacker.attack).toBe(1);
     expect(attacker.pa).toBe(4);
+  });
+
+  test('hammer attack uses T pattern and deals 3 damage', () => {
+    const hammer = itemsConfig.find(i => i.id === 'martelo');
+    const attacker = { id: 'blue', pos: { row: 3, col: 2 }, pa: 6 };
+    const enemy = { pos: { row: 0, col: 2 }, pv: 10 };
+    const cells = getTPatternCells(attacker, enemy);
+    const expected = [
+      { row: 2, col: 2 },
+      { row: 1, col: 2 },
+      { row: 0, col: 2 },
+      { row: 0, col: 1 },
+      { row: 0, col: 3 },
+    ];
+    expect(cells).toEqual(expected);
+    const hit = cells.some(
+      c => c.row === enemy.pos.row && c.col === enemy.pos.col,
+    );
+    if (hit) enemy.pv -= hammer.damage;
+    attacker.pa -= hammer.paCost;
+    expect(enemy.pv).toBe(7);
+    expect(attacker.pa).toBe(3);
   });
 });

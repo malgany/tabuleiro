@@ -158,8 +158,67 @@ export function clearItemAlcance() {
   cards.forEach(c => c.classList.remove('attackable'));
 }
 
+export function getTPatternCells(unit, enemy) {
+  const { row, col } = unit.pos;
+  // Determine orientation towards enemy or default to facing up/down based on unit id
+  let dr = 0;
+  let dc = 0;
+  if (enemy) {
+    const dRow = enemy.pos.row - row;
+    const dCol = enemy.pos.col - col;
+    if (Math.abs(dRow) >= Math.abs(dCol)) {
+      dr = Math.sign(dRow) || (unit.id === 'red' ? 1 : -1);
+    } else {
+      dc = Math.sign(dCol) || (unit.id === 'red' ? 1 : -1);
+    }
+  } else {
+    // Default orientation if no enemy provided
+    dr = unit.id === 'red' ? 1 : -1;
+  }
+
+  const cells = [];
+  for (let i = 1; i <= 3; i++) {
+    const r = row + dr * i;
+    const c = col + dc * i;
+    if (isInside(r, c)) cells.push({ row: r, col: c });
+  }
+
+  const farRow = row + dr * 3;
+  const farCol = col + dc * 3;
+  if (dr !== 0) {
+    const sides = [
+      { row: farRow, col: farCol - 1 },
+      { row: farRow, col: farCol + 1 },
+    ];
+    sides.forEach(pos => {
+      if (isInside(pos.row, pos.col)) cells.push(pos);
+    });
+  } else {
+    const sides = [
+      { row: farRow - 1, col: farCol },
+      { row: farRow + 1, col: farCol },
+    ];
+    sides.forEach(pos => {
+      if (isInside(pos.row, pos.col)) cells.push(pos);
+    });
+  }
+
+  return cells;
+}
+
 export function showItemAlcance(unit, item) {
   clearItemAlcance();
+  if (item.pattern === 'T') {
+    const cells = getTPatternCells(unit, getInactive());
+    cells.forEach(({ row: r, col: c }) => {
+      if (!isInside(r, c)) return;
+      const idx = rowColToIndex(r, c);
+      const card = cards[idx];
+      if (card) card.classList.add('attackable');
+    });
+    return;
+  }
+
   const { row, col } = unit.pos;
   const deltas = [
     [-1, 0],

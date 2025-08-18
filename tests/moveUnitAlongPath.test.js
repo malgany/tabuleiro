@@ -15,6 +15,7 @@ jest.unstable_mockModule('../js/units.js', () => ({
   showFloatingText,
   getCoords,
   resetUnits: jest.fn(),
+  getTPatternCells: jest.fn(() => []),
 }));
 
 jest.unstable_mockModule('../js/ui.js', () => ({
