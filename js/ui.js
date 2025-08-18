@@ -189,6 +189,9 @@ export function addItemCard(item) {
   card.title = item.effect;
 
   card.addEventListener('click', () => {
+    if (units.blue.pa < item.paCost) return;
+    units.blue.pa -= item.paCost;
+    updateBluePanel(units.blue);
     item.apply?.(units.blue);
     updateBluePanel(units.blue);
     if (item.consumable) {

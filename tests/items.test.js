@@ -22,9 +22,10 @@ describe('itemsConfig configuration', () => {
     const base = { pv: 10, pa: 5, attack: 1 };
     const find = id => itemsConfig.find(i => i.id === id);
 
-    const u1 = { ...base };
-    find('vida+2').apply(u1);
-    expect(u1.pv).toBe(12);
+    const heartTarget = { pv: 8, pa: 5 };
+    find('vida+2').apply(heartTarget);
+    expect(heartTarget.pv).toBe(10);
+    expect(heartTarget.pa).toBe(4);
 
     const u2 = { ...base };
     find('espada').apply(u2);
