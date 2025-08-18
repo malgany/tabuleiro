@@ -17,6 +17,7 @@ import * as ui from './ui.js';
 const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer } = ui;
 import { getRandomItems } from './config.js';
 import { showOverlay, showPopup } from './overlay.js';
+import { renderMap } from './map.js';
 
 export function checkGameOver() {
   if (units.blue.pv <= 0) ui.gameOver('derrota');
@@ -158,6 +159,7 @@ export function gameOver(result) {
               const mapScreen = document.getElementById('map-screen');
               if (boardScreen) boardScreen.style.display = 'none';
               if (mapScreen) mapScreen.style.display = '';
+              renderMap();
             },
             { once: true },
           );

@@ -20,11 +20,18 @@
   background: #6b7280;
   border: 2px solid #374151;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
 }
 
 .map-node.current {
   background: #10b981;
   border-color: #059669;
+  transform: scale(1.2);
+}
+
+.map-node.past {
+  background: #000;
+  border-color: #111827;
 }
 
 .map-connection {
@@ -36,5 +43,6 @@
 
 .map-play-btn {
   position: absolute;
+  transition: left 0.3s ease, top 0.3s ease;
 }
 
