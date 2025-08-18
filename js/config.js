@@ -54,10 +54,12 @@ export const itemsConfig = [
     icon: '💣',
     paCost: 4,
     damage: 5,
-    range: 2,
+    range: 3,
     effect: 'Causa 5 de dano',
     consumable: true,
     usable: true,
+    type: 'attack',
+    pattern: 'cross',
     apply(unit) {
       unit.pv -= 5;
     },

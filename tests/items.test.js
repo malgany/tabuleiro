@@ -1,5 +1,5 @@
 import { itemsConfig } from '../js/config.js';
-import { getTPatternCells } from '../js/units.js';
+import { getTPatternCells, getCrossPatternCells } from '../js/units.js';
 
 describe('itemsConfig configuration', () => {
   test('items array contains six objects with required properties', () => {
@@ -70,5 +70,29 @@ describe('itemsConfig configuration', () => {
     attacker.pa -= hammer.paCost;
     expect(enemy.pv).toBe(7);
     expect(attacker.pa).toBe(3);
+  });
+
+  test('bomb affects cross area and is consumable', () => {
+    const bomb = itemsConfig.find(i => i.id === 'bomba');
+    const center = { row: 2, col: 2 };
+    const cells = getCrossPatternCells(center);
+    const targets = [
+      { pos: { row: 2, col: 2 }, pv: 10 },
+      { pos: { row: 1, col: 2 }, pv: 10 },
+      { pos: { row: 2, col: 3 }, pv: 10 },
+      { pos: { row: 5, col: 5 }, pv: 10 },
+    ];
+    cells.forEach(cell => {
+      targets.forEach(t => {
+        if (t.pos.row === cell.row && t.pos.col === cell.col) {
+          bomb.apply(t);
+        }
+      });
+    });
+    expect(targets[0].pv).toBe(5);
+    expect(targets[1].pv).toBe(5);
+    expect(targets[2].pv).toBe(5);
+    expect(targets[3].pv).toBe(10);
+    expect(bomb.consumable).toBe(true);
   });
 });

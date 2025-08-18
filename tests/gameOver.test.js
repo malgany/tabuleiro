@@ -101,7 +101,7 @@ describe('gameOver victory chest', () => {
   });
 
   test('using a consumable card removes it from the slot', () => {
-    jest.spyOn(Math, 'random').mockReturnValue(0.55);
+    jest.spyOn(Math, 'random').mockReturnValue(0.05);
     gameOver('vitoria');
     jest.advanceTimersByTime(1000);
     document.querySelector('.chest')?.dispatchEvent(new Event('click'));
@@ -110,11 +110,11 @@ describe('gameOver victory chest', () => {
 
     const slots = document.querySelectorAll('.slot');
     const card = slots[1].firstElementChild;
-    expect(card?.textContent).toBe('💣');
+    expect(card?.textContent).toBe('💖');
 
-    units.blue.pv = 10;
+    units.blue.pv = 8;
     card?.dispatchEvent(new Event('click'));
-    expect(units.blue.pv).toBe(5);
+    expect(units.blue.pv).toBe(10);
     expect(slots[1].children.length).toBe(0);
   });
 });
