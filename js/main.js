@@ -8,6 +8,7 @@ import {
   showReachableFor,
   mountUnit,
   clearSocoAlcance,
+  clearItemAlcance,
   showFloatingText,
   getCoords,
   resetUnits,
@@ -222,6 +223,27 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!cell || r === undefined || c === undefined) return;
 
     const active = getActive();
+    const selected = ui.uiState.selectedItem;
+    if (selected && cell.classList.contains('attackable')) {
+      const enemy = getInactive();
+      const { item, card } = selected;
+      if (
+        enemy.pos.row === r &&
+        enemy.pos.col === c &&
+        active.pa >= item.paCost
+      ) {
+        active.pa -= item.paCost;
+        enemy.pv -= item.damage;
+        await animateAttack(active, enemy, item.paCost, item.damage);
+        updateBluePanel(units.blue);
+        mountUnit(enemy);
+        checkGameOver();
+      }
+      card.classList.remove('is-selected');
+      ui.uiState.selectedItem = null;
+      clearItemAlcance();
+      return;
+    }
     if (ui.uiState.socoSelecionado && cell.classList.contains('attackable')) {
       const enemy = getInactive();
       if (enemy.pos.row === r && enemy.pos.col === c && active.pa >= 3) {

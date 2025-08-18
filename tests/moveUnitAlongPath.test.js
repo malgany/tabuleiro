@@ -11,6 +11,7 @@ jest.unstable_mockModule('../js/units.js', () => ({
   showReachableFor: jest.fn(),
   mountUnit: jest.fn(),
   clearSocoAlcance: jest.fn(),
+  clearItemAlcance: jest.fn(),
   showFloatingText,
   getCoords,
   resetUnits: jest.fn(),
