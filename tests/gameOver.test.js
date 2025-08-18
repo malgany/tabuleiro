@@ -56,7 +56,7 @@ describe('gameOver victory chest', () => {
     expect(items.map(i => i.title)).toEqual([
       'Cura 2 PV',
       'Aumenta ataque em 3',
-      'Aumenta ataque em 4',
+      'Causa 3 de dano em T',
     ]);
   });
 

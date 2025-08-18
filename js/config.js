@@ -39,14 +39,15 @@ export const itemsConfig = [
     id: 'martelo',
     icon: '🔨',
     paCost: 3,
-    damage: 4,
-    range: 1,
-    effect: 'Aumenta ataque em 4',
+    damage: 3,
+    effect: 'Causa 3 de dano em T',
     consumable: false,
     usable: true,
-    apply(unit) {
-      unit.attack = (unit.attack || 0) + 4;
-    },
+    type: 'attack',
+    pattern: 'T',
+    // This item deals damage in a T-shaped area and does not
+    // permanently modify unit stats.
+    apply() {},
   },
   {
     id: 'bomba',
