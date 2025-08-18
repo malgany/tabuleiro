@@ -10,14 +10,15 @@ export const itemsConfig = [
   {
     id: 'vida+2',
     icon: '💖',
-    paCost: 0,
+    paCost: 1,
     damage: 0,
     range: 0,
     effect: 'Cura 2 PV',
     consumable: true,
-    usable: false,
+    usable: true,
     apply(unit) {
-      unit.pv += 2;
+      unit.pa -= 1;
+      unit.pv = Math.min(unit.pv + 2, unit.maxPv || 10);
     },
   },
   {
