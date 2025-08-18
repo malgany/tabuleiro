@@ -3,7 +3,7 @@ import { jest } from '@jest/globals';
 const ui = await import('../js/ui.js');
 const { passTurn, stopTurnTimer } = ui;
 const { units, setActiveId } = await import('../js/units.js');
-const { checkGameOver } = await import('../js/main.js');
+const { checkGameOver, gameOver, startBattle } = await import('../js/main.js');
 
 describe('game over logic', () => {
   beforeEach(() => {
@@ -55,5 +55,24 @@ describe('game over logic', () => {
     const btn = overlay?.querySelector('button');
     expect(btn?.textContent).toBe('Sair');
   });
+
+  test('startBattle removes chest and loot after victory', async () => {
+    document.body.innerHTML = '<div class="board"></div>';
+    gameOver('vitoria');
+    jest.advanceTimersByTime(1000);
+    const chest = document.querySelector('.chest');
+    expect(chest).not.toBeNull();
+    chest?.dispatchEvent(new Event('click'));
+    expect(document.querySelector('.loot')).not.toBeNull();
+    const p = startBattle();
+    expect(document.querySelector('.chest')).toBeNull();
+    expect(document.querySelector('.loot')).toBeNull();
+    for (let i = 0; i < 3; i++) {
+      jest.advanceTimersByTime(1000);
+      await Promise.resolve();
+    }
+    await p;
+    jest.runOnlyPendingTimers();
+  }, 10000);
 });
 

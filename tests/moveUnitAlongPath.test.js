@@ -13,6 +13,7 @@ jest.unstable_mockModule('../js/units.js', () => ({
   clearSocoAlcance: jest.fn(),
   showFloatingText,
   getCoords,
+  resetUnits: jest.fn(),
 }));
 
 jest.unstable_mockModule('../js/ui.js', () => ({
