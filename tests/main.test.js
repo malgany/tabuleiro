@@ -3,7 +3,8 @@ import { jest } from '@jest/globals';
 const ui = await import('../js/ui.js');
 const { passTurn, stopTurnTimer } = ui;
 const { units, setActiveId } = await import('../js/units.js');
-const { checkGameOver, gameOver, startBattle } = await import('../js/main.js');
+const { checkGameOver, gameOver } = await import('../js/main.js');
+const { startBattle } = await import('../js/game.js');
 
 describe('game over logic', () => {
   beforeEach(() => {

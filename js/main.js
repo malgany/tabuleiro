@@ -11,7 +11,6 @@ import {
   clearItemAlcance,
   showFloatingText,
   getCoords,
-  resetUnits,
   getTPatternCells,
   getCrossPatternCells,
   clearPathHighlight,
@@ -23,46 +22,15 @@ const {
   initUI,
   updateBluePanel,
   initEnemyTooltip,
-  startTurnTimer,
-  resetUI,
-  loadInventory,
 } = ui;
 import { getRandomItems } from './config.js';
-import { showOverlay, showPopup } from './overlay.js';
-import { renderMap } from './map.js';
+import { showOverlay } from './overlay.js';
 
 export function checkGameOver() {
   if (units.blue.pv <= 0) ui.gameOver('derrota');
   else if (units.red.pv <= 0) gameOver('vitoria');
 }
 
-export async function startBattle() {
-  document.querySelectorAll('.chest, .loot').forEach(el => el.remove());
-  resetUnits();
-  resetUI();
-  loadInventory();
-  // Recalcula a posição das unidades após o tabuleiro ficar visível. Caso os
-  // elementos sejam montados enquanto o tabuleiro está oculto (`display: none`),
-  // `getBoundingClientRect` retorna dimensões zero e as unidades desaparecem.
-  // Montá-las novamente garante que largura, altura e posição sejam atualizadas
-  // corretamente quando a batalha inicia.
-  mountUnit(units.blue);
-  mountUnit(units.red);
-
-  const overlay = showOverlay('Desafio contra vermelho', { persist: true });
-  for (let i = 3; i > 0; i--) {
-    overlay.textContent = String(i);
-    await new Promise(r => setTimeout(r, 1000));
-  }
-  overlay.classList.add('fade-out');
-  setTimeout(() => overlay.remove(), 300);
-  startTurnTimer();
-  showPopup('Iniciando turno do jogador azul', {
-    corner: 'top-left',
-  });
-  // Mostra casas alcançáveis para o jogador inicial sem exigir hover
-  if (units.blue.allow) showReachableFor(units.blue);
-}
 
 export async function moveUnitAlongPath(unit, path, cost) {
   if (path.length < 2) {
@@ -162,7 +130,7 @@ export function gameOver(result) {
                 const mapScreen = document.getElementById('map-screen');
                 if (boardScreen) boardScreen.style.display = 'none';
                 if (mapScreen) mapScreen.style.display = '';
-                renderMap();
+                import('./game.js').then(m => m.renderMap());
               });
             },
             { once: true },
@@ -327,5 +295,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('[Tabuleiro] Unidades inicializadas', units);
 });
-
-export { showOverlay };
