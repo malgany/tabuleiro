@@ -21,7 +21,7 @@ describe('start screen', () => {
     document.body.innerHTML = '';
   });
 
-  test('shows start screen initially', async () => {
+  test('exibe tela inicial ao carregar', async () => {
     await import('../js/map.js');
     expect(document.getElementById('start-screen').style.display).toBe('');
     expect(document.getElementById('map-screen').style.display).toBe('none');
