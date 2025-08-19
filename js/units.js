@@ -77,6 +77,7 @@ export function createUnitEl(id) {
   const el = document.createElement('div');
   el.className = `unit unit-${id}`;
   el.title = 'Unidade (hover p/ alcance, clique em verde p/ mover)';
+  el.style.backgroundImage = `url('./img/${id}.png')`;
   return el;
 }
 
