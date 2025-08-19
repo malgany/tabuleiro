@@ -153,12 +153,15 @@ export function passTurn() {
     duration: 1000,
   });
   clearReachable();
-  uiState.selectedItem?.slot?.classList.remove('is-selected');
+  const selectedSlots = document.querySelectorAll('.turn-panel .slot.is-selected');
+  const socoWasSelected = uiState.socoSlot?.classList.contains('is-selected');
+  selectedSlots.forEach(slot => slot.classList.remove('is-selected'));
   uiState.selectedItem = null;
   clearItemAlcance();
   uiState.socoSelecionado = false;
-  uiState.socoSlot?.classList.remove('is-selected');
-  clearSocoAlcance();
+  if (socoWasSelected) {
+    clearSocoAlcance();
+  }
   updateBluePanel(units.blue);
   // Destaca alcance de movimento da unidade ativa sem depender de hover
   const activeUnit = getActive();
