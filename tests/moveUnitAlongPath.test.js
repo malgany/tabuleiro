@@ -25,6 +25,8 @@ jest.unstable_mockModule('../js/ui.js', () => ({
   updateBluePanel: jest.fn(),
   initEnemyTooltip: jest.fn(),
   startTurnTimer: jest.fn(),
+  resetUI: jest.fn(),
+  loadInventory: jest.fn(),
 }));
 
 jest.unstable_mockModule('../js/overlay.js', () => ({

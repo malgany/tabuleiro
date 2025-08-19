@@ -25,6 +25,7 @@ const {
 } = ui;
 import { getRandomItems } from './config.js';
 import { showOverlay } from './overlay.js';
+import './map.js';
 
 export function checkGameOver() {
   if (units.blue.pv <= 0) ui.gameOver('derrota');

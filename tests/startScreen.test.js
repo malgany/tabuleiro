@@ -22,7 +22,7 @@ describe('start screen', () => {
   });
 
   test('exibe tela inicial ao carregar', async () => {
-    await import('../js/map.js');
+    await import('../js/main.js');
     expect(document.getElementById('start-screen').style.display).toBe('');
     expect(document.getElementById('map-screen').style.display).toBe('none');
     expect(document.getElementById('board-screen').style.display).toBe('none');
@@ -31,7 +31,7 @@ describe('start screen', () => {
   test('starts a new game clearing storage', async () => {
     localStorage.setItem('stage', '2');
     localStorage.setItem('foo', 'bar');
-    await import('../js/map.js');
+    await import('../js/main.js');
     document.getElementById('new-game').click();
     expect(localStorage.getItem('foo')).toBeNull();
     expect(localStorage.getItem('stage')).toBe('0');
@@ -41,7 +41,7 @@ describe('start screen', () => {
 
   test('continues existing game without clearing storage', async () => {
     localStorage.setItem('stage', '1');
-    await import('../js/map.js');
+    await import('../js/main.js');
     document.getElementById('continue-game').click();
     expect(localStorage.getItem('stage')).toBe('1');
     expect(document.getElementById('start-screen').style.display).toBe('none');
