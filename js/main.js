@@ -51,6 +51,8 @@ export async function startBattle() {
   showPopup('Iniciando turno do jogador azul', {
     corner: 'top-left',
   });
+  // Mostra casas alcançáveis para o jogador inicial sem exigir hover
+  if (units.blue.allow) showReachableFor(units.blue);
 }
 
 export async function moveUnitAlongPath(unit, path, cost) {
@@ -271,6 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
       card.classList.remove('is-selected');
       ui.uiState.selectedItem = null;
       clearItemAlcance();
+      // Após usar o item, reexibe alcance de movimento caso haja PM
+      if (active.allow) showReachableFor(active);
       return;
     }
     if (ui.uiState.socoSelecionado && cell.classList.contains('attackable')) {
@@ -288,6 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
       ui.uiState.socoSelecionado = false;
       ui.uiState.socoSlot.classList.remove('is-selected');
       clearSocoAlcance();
+       // Após atacar, reexibe alcance de movimento caso haja PM
+      if (active.allow) showReachableFor(active);
       return;
     }
 
