@@ -51,6 +51,23 @@ describe('passTurn', () => {
     jest.advanceTimersByTime(300);
     expect(document.querySelector('.popup')).toBeNull();
   });
+
+  test('passing the turn clears all slot selections', () => {
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    const sword = itemsConfig.find(i => i.id === 'espada');
+    addItemCard(sword);
+    setActiveId('blue');
+    uiState.socoSlot.classList.add('is-selected');
+    uiState.socoSelecionado = true;
+    const secondSlot = document.querySelector('.turn-panel .slot:nth-child(2)');
+    secondSlot.classList.add('is-selected');
+    uiState.selectedItem = { item: sword, slot: secondSlot };
+    passTurn();
+    expect(document.querySelectorAll('.turn-panel .slot.is-selected').length).toBe(0);
+    expect(uiState.socoSelecionado).toBe(false);
+    expect(uiState.selectedItem).toBeNull();
+  });
 });
 
 describe('startBattle', () => {
