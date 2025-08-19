@@ -120,6 +120,28 @@ describe('addItemCard', () => {
     expect(units.blue.pv).toBe(10);
     expect(document.querySelector('.card-item')).toBeNull();
   });
+
+  test('attack items display their damage value', () => {
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    const hammer = itemsConfig.find(i => i.id === 'martelo');
+    addItemCard(hammer);
+    const card = document.querySelector('.card-item');
+    const atk = card.querySelector('.atk');
+    expect(atk).not.toBeNull();
+    expect(atk.textContent).toBe(String(hammer.damage));
+  });
+
+  test('defensive items display life bonus in red', () => {
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    const shield = itemsConfig.find(i => i.id === 'escudo');
+    addItemCard(shield);
+    const card = document.querySelector('.card-item');
+    const hp = card.querySelector('.hp');
+    expect(hp).not.toBeNull();
+    expect(hp.textContent).toBe(`+${shield.pvBonus}`);
+  });
 });
 
 describe('inventory management', () => {

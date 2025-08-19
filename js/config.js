@@ -16,6 +16,7 @@ export const itemsConfig = [
     effect: 'Cura 2 PV',
     consumable: true,
     usable: true,
+    pvBonus: 2,
     apply(unit) {
       unit.pv = Math.min(unit.pv + 2, unit.maxPv || 10);
     },
@@ -72,6 +73,7 @@ export const itemsConfig = [
     effect: 'Aumenta PV máximo em 3',
     consumable: true,
     usable: true,
+    pvBonus: 3,
     apply(unit) {
       unit.maxPv = (unit.maxPv ?? 10) + 3;
     },

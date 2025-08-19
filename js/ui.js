@@ -253,6 +253,18 @@ export function addItemCard(item) {
   card.title = item.effect;
   card.dataset.itemId = item.id;
 
+  if (item.type === 'attack') {
+    const atk = document.createElement('span');
+    atk.className = 'atk';
+    atk.textContent = String(item.damage);
+    card.appendChild(atk);
+  } else if (item.pvBonus) {
+    const hp = document.createElement('span');
+    hp.className = 'hp';
+    hp.textContent = `+${item.pvBonus}`;
+    card.appendChild(hp);
+  }
+
   card.addEventListener('click', () => {
     if (getActive().id !== 'blue') return;
     if (item.type === 'attack') {

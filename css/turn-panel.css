@@ -27,7 +27,8 @@
 }
 
 .slot .card-soco,
-.slot .card-extra {
+.slot .card-extra,
+.slot .card-item {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,12 +37,22 @@
 }
 
 .slot .card-soco .atk,
-.slot .card-extra .atk {
+.slot .card-extra .atk,
+.slot .card-item .atk,
+.slot .card-item .hp {
   position: absolute;
   top: 2px;
   right: 4px;
   font-size: 14px;
   font-weight: 700;
+}
+
+.slot .card-item .atk {
+  color: #fff;
+}
+
+.slot .card-item .hp {
+  color: #ef4444;
 }
 
 .slot.is-selected {
