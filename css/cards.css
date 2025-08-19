@@ -38,15 +38,13 @@
 }
 
 .card.path {
-  outline: 3px solid rgba(16, 185, 129, 0.85);
-  outline-offset: -3px;
-  background-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.3);
+  background-image: none;
 }
 
 .card.attackable {
-  outline: 3px solid rgba(59,130,246,.85);
-  outline-offset: -3px;
-  background-color: rgba(59,130,246,.25);
+  background: rgba(59, 130, 246, 0.3);
+  background-image: none;
 }
 
 /* Diferenciar unidades e turno ativo */
