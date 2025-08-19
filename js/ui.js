@@ -11,6 +11,7 @@ import {
 } from './units.js';
 import { showOverlay, showPopup } from './overlay.js';
 import { checkGameOver } from './main.js';
+import { itemsConfig } from './config.js';
 
 export const uiState = {
   socoSlot: null,
@@ -225,17 +226,32 @@ export function initUI() {
   }
 }
 
+function updateInventoryStorage() {
+  const slots = document.querySelectorAll('.turn-panel .slot');
+  const ids = Array.from(slots)
+    .slice(1)
+    .map(slot => slot.querySelector('.card-item')?.dataset.itemId)
+    .filter(Boolean);
+  localStorage.setItem('inventory', JSON.stringify(ids));
+}
+
+export function loadInventory() {
+  const saved = JSON.parse(localStorage.getItem('inventory') || '[]');
+  saved.forEach(id => {
+    const item = itemsConfig.find(i => i.id === id);
+    if (item) addItemCard(item);
+  });
+}
+
 export function addItemCard(item) {
   const slots = document.querySelector('.turn-panel .slots');
-  const empty = Array.from(slots?.children || []).find(
-    s => s.children.length === 0,
-  );
-  if (!empty) return;
+  if (!slots) return;
 
   const card = document.createElement('div');
   card.className = 'card-item';
   card.textContent = item.icon || item.id;
   card.title = item.effect;
+  card.dataset.itemId = item.id;
 
   card.addEventListener('click', () => {
     if (getActive().id !== 'blue') return;
@@ -259,10 +275,39 @@ export function addItemCard(item) {
     updateBluePanel(units.blue);
     if (item.consumable) {
       card.remove();
+      updateInventoryStorage();
     }
   });
 
-  empty.appendChild(card);
+  const empty = Array.from(slots.children).find(s => s.children.length === 0);
+  if (empty) {
+    empty.appendChild(card);
+    updateInventoryStorage();
+    return card;
+  }
+
+  // Inventory full: allow replacing an existing item
+  const overlay = showOverlay('Inventário cheio! Selecione um item para substituir.', {
+    persist: true,
+  });
+  overlay.style.pointerEvents = 'none';
+
+  const slotArr = Array.from(slots.children);
+  const onReplace = e => {
+    const slot = e.currentTarget;
+    if (slot === uiState.socoSlot) return;
+    slot.innerHTML = '';
+    slot.appendChild(card);
+    overlay.remove();
+    slotArr.forEach(s => s.removeEventListener('click', onReplace));
+    updateInventoryStorage();
+  };
+
+  slotArr.forEach(s => {
+    if (s !== uiState.socoSlot) s.addEventListener('click', onReplace);
+  });
+
+  return card;
 }
 
 export function resetUI() {

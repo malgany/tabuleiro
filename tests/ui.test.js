@@ -1,5 +1,14 @@
 import { jest } from '@jest/globals';
-const { passTurn, stopTurnTimer, startTurnTimer, initUI, addItemCard, uiState } = await import('../js/ui.js');
+const {
+  passTurn,
+  stopTurnTimer,
+  startTurnTimer,
+  initUI,
+  addItemCard,
+  uiState,
+  resetUI,
+  loadInventory,
+} = await import('../js/ui.js');
 const { units, setActiveId, getActive } = await import('../js/units.js');
 const { startBattle, gameOver } = await import('../js/main.js');
 const { itemsConfig } = await import('../js/config.js');
@@ -14,6 +23,7 @@ describe('passTurn', () => {
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
     document.body.innerHTML = '';
+    localStorage.clear();
   });
 
   test('refills PA for the unit that ended its turn', () => {
@@ -47,6 +57,7 @@ describe('startBattle', () => {
   afterEach(() => {
     stopTurnTimer();
     document.body.innerHTML = '';
+    localStorage.clear();
   });
 
   test('timer starts only after countdown', async () => {
@@ -108,6 +119,43 @@ describe('addItemCard', () => {
     expect(units.blue.pa).toBe(5);
     expect(units.blue.pv).toBe(10);
     expect(document.querySelector('.card-item')).toBeNull();
+  });
+});
+
+describe('inventory management', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+    localStorage.clear();
+  });
+
+  test('selected loot is stored in first empty slot and persists', () => {
+    const heart = itemsConfig.find(i => i.id === 'vida+2');
+    addItemCard(heart);
+    expect(JSON.parse(localStorage.getItem('inventory'))).toEqual(['vida+2']);
+    resetUI();
+    loadInventory();
+    const card = document.querySelector('.slot:nth-child(2) .card-item');
+    expect(card).not.toBeNull();
+    expect(card.dataset.itemId).toBe('vida+2');
+  });
+
+  test('shows replace interface when slots are full', () => {
+    const items = itemsConfig.slice(0, 4);
+    items.slice(0, 3).forEach(it => addItemCard(it));
+    addItemCard(items[3]);
+    const overlay = document.querySelector('.overlay');
+    expect(overlay).not.toBeNull();
+    const slots = document.querySelectorAll('.turn-panel .slot');
+    slots[2].click();
+    expect(document.querySelector('.overlay')).toBeNull();
+    const card = slots[2].querySelector('.card-item');
+    expect(card.dataset.itemId).toBe(items[3].id);
   });
 });
 
