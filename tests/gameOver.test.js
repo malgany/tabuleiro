@@ -115,4 +115,24 @@ describe('gameOver victory chest', () => {
     expect(units.blue.pv).toBe(10);
     expect(slots[1].children.length).toBe(0);
   });
+
+  test('shield increases maxPv only when card is used', () => {
+    jest.spyOn(Math, 'random').mockReturnValue(0.8);
+    units.blue.maxPv = 10;
+    units.blue.pv = 10;
+    gameOver('vitoria');
+    jest.advanceTimersByTime(1000);
+    document.querySelector('.chest')?.dispatchEvent(new Event('click'));
+    const lootItem = document.querySelector('.loot-item');
+    lootItem?.dispatchEvent(new Event('click'));
+
+    const slots = document.querySelectorAll('.slot');
+    expect(slots[1].children.length).toBe(1);
+    expect(units.blue.maxPv).toBe(10);
+
+    const card = slots[1].firstElementChild;
+    card?.dispatchEvent(new Event('click'));
+    expect(units.blue.maxPv).toBe(13);
+    expect(slots[1].children.length).toBe(0);
+  });
 });
