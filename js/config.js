@@ -72,7 +72,7 @@ export const itemsConfig = [
     range: 0,
     effect: 'Aumenta PV máximo em 3',
     consumable: true,
-    usable: false,
+    usable: true,
     apply(unit) {
       unit.maxPv = (unit.maxPv ?? 10) + 3;
     },
