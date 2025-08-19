@@ -10,7 +10,8 @@ const {
   loadInventory,
 } = await import('../js/ui.js');
 const { units, setActiveId, getActive } = await import('../js/units.js');
-const { startBattle, gameOver } = await import('../js/main.js');
+const { gameOver } = await import('../js/main.js');
+const { startBattle } = await import('../js/game.js');
 const { itemsConfig } = await import('../js/config.js');
 
 describe('passTurn', () => {
