@@ -18,7 +18,14 @@ import {
 
 import * as ui from './ui.js';
 
-const { initUI, updateBluePanel, initEnemyTooltip, startTurnTimer, resetUI } = ui;
+const {
+  initUI,
+  updateBluePanel,
+  initEnemyTooltip,
+  startTurnTimer,
+  resetUI,
+  loadInventory,
+} = ui;
 import { getRandomItems } from './config.js';
 import { showOverlay, showPopup } from './overlay.js';
 import { renderMap } from './map.js';
@@ -32,6 +39,7 @@ export async function startBattle() {
   document.querySelectorAll('.chest, .loot').forEach(el => el.remove());
   resetUnits();
   resetUI();
+  loadInventory();
   // Recalcula a posição das unidades após o tabuleiro ficar visível. Caso os
   // elementos sejam montados enquanto o tabuleiro está oculto (`display: none`),
   // `getBoundingClientRect` retorna dimensões zero e as unidades desaparecem.
