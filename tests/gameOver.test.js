@@ -84,7 +84,7 @@ describe('gameOver victory chest', () => {
 
     const slots = document.querySelectorAll('.slot');
     const card = slots[1].firstElementChild;
-    expect(card?.textContent).toBe('🗡️');
+    expect(card?.textContent).toBe('🗡️3');
     expect(units.blue.attack).toBeUndefined();
 
     // Clicking the card toggles selection but does not change stats
@@ -108,7 +108,7 @@ describe('gameOver victory chest', () => {
 
     const slots = document.querySelectorAll('.slot');
     const card = slots[1].firstElementChild;
-    expect(card?.textContent).toBe('💖');
+    expect(card?.textContent).toBe('💖+2');
 
     units.blue.pv = 8;
     card?.dispatchEvent(new Event('click'));
