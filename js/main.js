@@ -133,18 +133,13 @@ export function gameOver(result) {
           el.textContent = it.icon || it.id;
           el.title = it.effect;
 
-          // When the player chooses an item we either consume it immediately or
-          // move it to an inventory slot, then transition back to the map
-          // screen advancing the stage.
+          // When the player chooses an item it is stored in an inventory slot,
+          // then the game transitions back to the map screen advancing the
+          // stage.
           el.addEventListener(
             'click',
             () => {
-              if (!it.usable) {
-                it.apply?.(units.blue);
-                updateBluePanel(units.blue);
-              } else {
-                ui.addItemCard(it);
-              }
+              ui.addItemCard(it);
 
               // Advance stage and show the map screen again
               const stageKey = 'stage';
