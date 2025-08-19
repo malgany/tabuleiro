@@ -34,6 +34,10 @@
 
 /* Alcance (células verdes) */
 .card.reachable {
+  cursor: pointer;
+}
+
+.card.path {
   outline: 3px solid rgba(16, 185, 129, 0.85);
   outline-offset: -3px;
   background-color: rgba(16, 185, 129, 0.25);

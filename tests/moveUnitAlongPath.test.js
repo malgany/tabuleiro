@@ -12,6 +12,7 @@ jest.unstable_mockModule('../js/units.js', () => ({
   mountUnit: jest.fn(),
   clearSocoAlcance: jest.fn(),
   clearItemAlcance: jest.fn(),
+  clearPathHighlight: jest.fn(),
   showFloatingText,
   getCoords,
   resetUnits: jest.fn(),

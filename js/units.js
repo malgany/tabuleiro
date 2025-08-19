@@ -1,5 +1,5 @@
 import { ROWS, COLS, rowColToIndex, isInside } from './board-utils.js';
-import { computeReachable } from './pathfinding.js';
+import { computeReachable, buildPath } from './pathfinding.js';
 
 let cards = [];
 let board = null;
@@ -115,8 +115,17 @@ export function reflectActiveStyles() {
   });
 }
 
+export function clearPathHighlight() {
+  cards.forEach(c => c.classList.remove('path'));
+}
+
 export function clearReachable() {
-  cards.forEach(c => c.classList.remove('reachable'));
+  cards.forEach(c => {
+    c.classList.remove('reachable');
+    c.onmouseenter = null;
+    c.onmouseleave = null;
+  });
+  clearPathHighlight();
 }
 
 export function showReachableFor(unit) {
@@ -129,7 +138,18 @@ export function showReachableFor(unit) {
       const d = dist[r][c];
       if (Number.isFinite(d) && d > 0 && d <= unit.pm) {
         const idx = rowColToIndex(r, c);
-        cards[idx].classList.add('reachable');
+        const card = cards[idx];
+        card.classList.add('reachable');
+        card.onmouseenter = () => {
+          clearPathHighlight();
+          const path = buildPath(unit.pos, { row: r, col: c }, dist, unit.allow);
+          if (!path) return;
+          path.slice(1).forEach(({ row: pr, col: pc }) => {
+            const pIdx = rowColToIndex(pr, pc);
+            cards[pIdx].classList.add('path');
+          });
+        };
+        card.onmouseleave = clearPathHighlight;
       }
     }
   }

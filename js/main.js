@@ -14,6 +14,7 @@ import {
   resetUnits,
   getTPatternCells,
   getCrossPatternCells,
+  clearPathHighlight,
 } from './units.js';
 
 import * as ui from './ui.js';
@@ -68,37 +69,38 @@ export async function moveUnitAlongPath(unit, path, cost) {
     showFloatingText(unit, `-${cost}`, 'pm');
     return;
   }
-  const dest = path[path.length - 1];
-  const { x: endX, y: endY } = getCoords(dest.row, dest.col);
-  const dx = endX - unit.x;
-  const dy = endY - unit.y;
+  for (let i = 1; i < path.length; i++) {
+    const step = path[i];
+    const { x: endX, y: endY } = getCoords(step.row, step.col);
+    const dx = endX - unit.x;
+    const dy = endY - unit.y;
 
-  await new Promise(resolve => {
-    if (dx === 0 && dy === 0) {
-      resolve();
-      return;
-    }
-    const handler = () => resolve();
-    unit.el.addEventListener('transitionend', handler, { once: true });
-    unit.el.style.transform = `translate(-50%, -50%) translate(${dx}px, ${dy}px)`;
-  });
+    await new Promise(resolve => {
+      if (dx === 0 && dy === 0) {
+        resolve();
+        return;
+      }
+      const handler = () => resolve();
+      unit.el.addEventListener('transitionend', handler, { once: true });
+      unit.el.style.transform = `translate(-50%, -50%) translate(${dx}px, ${dy}px)`;
+    });
 
-  unit.pos = dest;
-  unit.x = endX;
-  unit.y = endY;
-  unit.el.dataset.row = String(dest.row);
-  unit.el.dataset.col = String(dest.col);
+    unit.pos = step;
+    unit.x = endX;
+    unit.y = endY;
+    unit.el.dataset.row = String(step.row);
+    unit.el.dataset.col = String(step.col);
 
-  // Temporarily disable transform transitions to avoid a second animation
-  const el = unit.el;
-  const prevTransition = el.style.transition;
-  el.style.transition = 'none';
-  el.style.left = `${endX}px`;
-  el.style.top = `${endY}px`;
-  el.style.transform = 'translate(-50%, -50%)';
-  // Force reflow so the transition reset takes effect
-  void el.offsetWidth;
-  el.style.transition = prevTransition;
+    // snap to the new cell before next step
+    const el = unit.el;
+    const prevTransition = el.style.transition;
+    el.style.transition = 'none';
+    el.style.left = `${endX}px`;
+    el.style.top = `${endY}px`;
+    el.style.transform = 'translate(-50%, -50%)';
+    void el.offsetWidth;
+    el.style.transition = prevTransition;
+  }
 
   showFloatingText(unit, `-${cost}`, 'pm');
 }
@@ -314,6 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cost = dist[r][c];
     if (!Number.isFinite(cost) || cost <= 0 || cost > active.pm) return;
 
+    clearPathHighlight();
     active.pm -= cost;
     await moveUnitAlongPath(active, path, cost);
     updateBluePanel(units.blue);
