@@ -1,6 +1,6 @@
 import { jest } from '@jest/globals';
 const { passTurn, stopTurnTimer, startTurnTimer, initUI, addItemCard, uiState } = await import('../js/ui.js');
-const { units, setActiveId } = await import('../js/units.js');
+const { units, setActiveId, getActive } = await import('../js/units.js');
 const { startBattle, gameOver } = await import('../js/main.js');
 const { itemsConfig } = await import('../js/config.js');
 
@@ -108,5 +108,47 @@ describe('addItemCard', () => {
     expect(units.blue.pa).toBe(5);
     expect(units.blue.pv).toBe(10);
     expect(document.querySelector('.card-item')).toBeNull();
+  });
+});
+
+describe('keyboard shortcuts', () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+  });
+
+  afterEach(() => {
+    stopTurnTimer();
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+    document.body.innerHTML = '';
+    uiState.socoSelecionado = false;
+    uiState.selectedItem = null;
+  });
+
+  test('spacebar passes the turn', () => {
+    setActiveId('blue');
+    const evt = new KeyboardEvent('keydown', { code: 'Space' });
+    document.dispatchEvent(evt);
+    expect(getActive().id).toBe('red');
+  });
+
+  test('number keys select corresponding slots for blue turn', () => {
+    setActiveId('blue');
+    const sword = itemsConfig.find(i => i.id === 'espada');
+    addItemCard(sword);
+    const hammer = itemsConfig.find(i => i.id === 'martelo');
+    addItemCard(hammer);
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
+    expect(uiState.socoSelecionado).toBe(true);
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: '3' }));
+    expect(uiState.selectedItem?.item).toBe(hammer);
+  });
+
+  test('number keys ignored when it is not blue turn', () => {
+    setActiveId('red');
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
+    expect(uiState.socoSelecionado).toBe(false);
   });
 });
