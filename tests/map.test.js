@@ -17,7 +17,7 @@ describe('map progression', () => {
   test('advances to next node after victory', async () => {
     localStorage.setItem('stage', '1');
     localStorage.setItem('played', 'true');
-    await import('../js/map.js');
+    await import('../js/main.js');
     const nodes = document.querySelectorAll('.map-node');
     const currentIndex = Array.from(nodes).findIndex(n =>
       n.classList.contains('current'),
