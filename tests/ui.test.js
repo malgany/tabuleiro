@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 const { passTurn, stopTurnTimer, startTurnTimer, initUI, addItemCard, uiState } = await import('../js/ui.js');
 const { units, setActiveId } = await import('../js/units.js');
 const { startBattle, gameOver } = await import('../js/main.js');
+const { itemsConfig } = await import('../js/config.js');
 
 describe('passTurn', () => {
   beforeEach(() => {
@@ -88,4 +89,24 @@ describe('startBattle', () => {
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
   }, 10000);
+});
+
+describe('addItemCard', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  test('using heal item subtracts PA cost once', () => {
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    units.blue.pa = 6;
+    units.blue.pv = 8;
+    const heart = itemsConfig.find(i => i.id === 'vida+2');
+    addItemCard(heart);
+    const card = document.querySelector('.card-item');
+    card.click();
+    expect(units.blue.pa).toBe(5);
+    expect(units.blue.pv).toBe(10);
+    expect(document.querySelector('.card-item')).toBeNull();
+  });
 });

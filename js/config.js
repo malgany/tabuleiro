@@ -17,7 +17,6 @@ export const itemsConfig = [
     consumable: true,
     usable: true,
     apply(unit) {
-      unit.pa -= 1;
       unit.pv = Math.min(unit.pv + 2, unit.maxPv || 10);
     },
   },
