@@ -3,6 +3,7 @@ import {
   getActive,
   setActiveId,
   clearReachable,
+  showReachableFor,
   showSocoAlcance as showSocoAlcanceUnits,
   clearSocoAlcance as clearSocoAlcanceUnits,
   showItemAlcance as showItemAlcanceUnits,
@@ -119,6 +120,9 @@ export function passTurn() {
   uiState.selectedItem = null;
   clearItemAlcance();
   updateBluePanel(units.blue);
+  // Destaca alcance de movimento da unidade ativa sem depender de hover
+  const activeUnit = getActive();
+  if (activeUnit.allow) showReachableFor(activeUnit);
   checkGameOver();
   if (units.blue.pv > 0 && units.red.pv > 0) {
     startTurnTimer();
