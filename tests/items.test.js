@@ -94,6 +94,7 @@ describe('itemsConfig configuration', () => {
 
   test('shield increases maxPv without healing', () => {
     const shield = itemsConfig.find(i => i.id === 'escudo');
+    expect(shield.usable).toBe(true);
     const unit = { pv: 8, maxPv: 10 };
     shield.apply(unit);
     expect(unit.maxPv).toBe(13);
