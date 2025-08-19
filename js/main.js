@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const selected = ui.uiState.selectedItem;
     if (selected && cell.classList.contains('attackable')) {
       const enemy = getInactive();
-      const { item, card } = selected;
+      const { item, card, slot } = selected;
       if (item.pattern === 'T') {
         const cells = getTPatternCells(active, enemy);
         const hit = cells.some(
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         checkGameOver();
       }
       if (item.consumable) card.remove();
-      card.classList.remove('is-selected');
+      slot.classList.remove('is-selected');
       ui.uiState.selectedItem = null;
       clearItemAlcance();
       // Após usar o item, reexibe alcance de movimento caso haja PM
