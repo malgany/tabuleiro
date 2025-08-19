@@ -52,6 +52,29 @@ let intervalId = null;
 let passBtn = null;
 let timerEl = null;
 
+let shortcutsBound = false;
+
+function handleShortcuts(ev) {
+  if (ev.code === 'Space') {
+    ev.preventDefault();
+    passTurn();
+    return;
+  }
+  const key = ev.key;
+  if (!['1', '2', '3', '4'].includes(key)) return;
+  if (getActive().id !== 'blue') return;
+  const slots = document.querySelectorAll('.turn-panel .slot');
+  const idx = Number(key) - 1;
+  const slot = slots[idx];
+  if (!slot) return;
+  if (idx === 0) {
+    slot.click();
+  } else {
+    const card = slot.firstElementChild;
+    card?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  }
+}
+
 function updatePassButton() {
   if (!passBtn || !timerEl) return;
   passBtn.textContent = 'Passar Vez';
@@ -195,6 +218,11 @@ export function initUI() {
   updateBluePanel(units.blue);
 
   passBtn.addEventListener('click', passTurn);
+
+  if (!shortcutsBound) {
+    document.addEventListener('keydown', handleShortcuts);
+    shortcutsBound = true;
+  }
 }
 
 export function addItemCard(item) {
