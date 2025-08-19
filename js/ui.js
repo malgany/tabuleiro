@@ -267,7 +267,7 @@ export function loadInventory() {
   recalculatePvBonus();
 }
 
-export function addItemCard(item) {
+export function addItemCard(item, onComplete = () => {}) {
   const slots = document.querySelector('.turn-panel .slots');
   if (!slots) return;
 
@@ -333,6 +333,7 @@ export function addItemCard(item) {
     bindSlot(empty);
     empty.appendChild(card);
     updateInventoryStorage();
+    onComplete(card);
     return card;
   }
 
@@ -352,6 +353,7 @@ export function addItemCard(item) {
     overlay.remove();
     slotArr.forEach(s => s.removeEventListener('click', onReplace));
     updateInventoryStorage();
+    onComplete(card);
   };
 
   slotArr.forEach(s => {
