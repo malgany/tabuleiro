@@ -83,17 +83,18 @@ describe('gameOver victory chest', () => {
     lootItem?.dispatchEvent(new Event('click'));
 
     const slots = document.querySelectorAll('.slot');
-    const card = slots[1].firstElementChild;
+    const slot = slots[1];
+    const card = slot.firstElementChild;
     expect(card?.textContent).toBe('🗡️3');
     expect(units.blue.attack).toBeUndefined();
 
-    // Clicking the card toggles selection but does not change stats
-    card?.dispatchEvent(new Event('click'));
+    // Clicking the slot toggles selection but does not change stats
+    slot.dispatchEvent(new Event('click'));
     expect(units.blue.attack).toBeUndefined();
     expect(ui.uiState.selectedItem?.item.id).toBe('espada');
 
     // Deselecting keeps the card for later use
-    card?.dispatchEvent(new Event('click'));
+    slot.dispatchEvent(new Event('click'));
     expect(ui.uiState.selectedItem).toBeNull();
     expect(slots[1].children.length).toBe(1);
   });
@@ -107,11 +108,12 @@ describe('gameOver victory chest', () => {
     lootItem?.dispatchEvent(new Event('click'));
 
     const slots = document.querySelectorAll('.slot');
-    const card = slots[1].firstElementChild;
+    const slot = slots[1];
+    const card = slot.firstElementChild;
     expect(card?.textContent).toBe('💖+2');
 
     units.blue.pv = 8;
-    card?.dispatchEvent(new Event('click'));
+    slot.dispatchEvent(new Event('click'));
     expect(units.blue.pv).toBe(10);
     expect(slots[1].children.length).toBe(0);
   });

@@ -147,6 +147,16 @@ describe('addItemCard', () => {
     expect(hp.textContent).toBe(`+${shield.pvBonus}`);
   });
 
+  test('selecting an attack item highlights its slot', () => {
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    const sword = itemsConfig.find(i => i.id === 'espada');
+    addItemCard(sword);
+    const slot = document.querySelector('.turn-panel .slot:nth-child(2)');
+    slot?.dispatchEvent(new Event('click'));
+    expect(slot?.classList.contains('is-selected')).toBe(true);
+  });
+
   test('shield item passively increases PV and max PV without being consumed', () => {
     document.body.innerHTML = '<div class="page"></div>';
     initUI();
@@ -230,10 +240,14 @@ describe('keyboard shortcuts', () => {
     addItemCard(sword);
     const hammer = itemsConfig.find(i => i.id === 'martelo');
     addItemCard(hammer);
+    const slots = document.querySelectorAll('.turn-panel .slot');
     document.dispatchEvent(new KeyboardEvent('keydown', { key: '1' }));
-    expect(uiState.socoSelecionado).toBe(true);
+    expect(slots[0].classList.contains('is-selected')).toBe(true);
     document.dispatchEvent(new KeyboardEvent('keydown', { key: '3' }));
+    expect(slots[0].classList.contains('is-selected')).toBe(false);
+    expect(slots[2].classList.contains('is-selected')).toBe(true);
     expect(uiState.selectedItem?.item).toBe(hammer);
+    expect(uiState.selectedItem?.slot).toBe(slots[2]);
   });
 
   test('number keys ignored when it is not blue turn', () => {

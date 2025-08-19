@@ -86,12 +86,7 @@ function handleShortcuts(ev) {
   const idx = Number(key) - 1;
   const slot = slots[idx];
   if (!slot) return;
-  if (idx === 0) {
-    slot.click();
-  } else {
-    const card = slot.firstElementChild;
-    card?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-  }
+  slot.click();
 }
 
 function updatePassButton() {
@@ -158,9 +153,12 @@ export function passTurn() {
     duration: 1000,
   });
   clearReachable();
-  uiState.selectedItem?.card?.classList.remove('is-selected');
+  uiState.selectedItem?.slot?.classList.remove('is-selected');
   uiState.selectedItem = null;
   clearItemAlcance();
+  uiState.socoSelecionado = false;
+  uiState.socoSlot?.classList.remove('is-selected');
+  clearSocoAlcance();
   updateBluePanel(units.blue);
   // Destaca alcance de movimento da unidade ativa sem depender de hover
   const activeUnit = getActive();
@@ -198,6 +196,9 @@ export function initUI() {
     uiState.socoSelecionado = !uiState.socoSelecionado;
     socoSlot.classList.toggle('is-selected', uiState.socoSelecionado);
     if (uiState.socoSelecionado) {
+      uiState.selectedItem?.slot?.classList.remove('is-selected');
+      uiState.selectedItem = null;
+      clearItemAlcance();
       showSocoAlcance();
     } else {
       clearSocoAlcance();
@@ -285,38 +286,48 @@ export function addItemCard(item) {
     card.appendChild(hp);
   }
 
-  card.addEventListener('click', () => {
-    if (getActive().id !== 'blue') return;
-    if (item.type === 'attack') {
-      if (uiState.selectedItem?.card === card) {
-        card.classList.remove('is-selected');
-        uiState.selectedItem = null;
-        clearItemAlcance();
-      } else {
-        uiState.selectedItem?.card?.classList.remove('is-selected');
-        uiState.selectedItem = { item, card };
-        card.classList.add('is-selected');
-        showItemAlcance(item);
+  const bindSlot = slot => {
+    const onSlotClick = () => {
+      if (!slot.contains(card)) return;
+      if (getActive().id !== 'blue') return;
+      if (item.type === 'attack') {
+        if (uiState.selectedItem?.slot === slot) {
+          slot.classList.remove('is-selected');
+          uiState.selectedItem = null;
+          clearItemAlcance();
+        } else {
+          uiState.selectedItem?.slot?.classList.remove('is-selected');
+          uiState.socoSelecionado = false;
+          uiState.socoSlot?.classList.remove('is-selected');
+          clearSocoAlcance();
+          uiState.selectedItem = { item, card, slot };
+          slot.classList.add('is-selected');
+          showItemAlcance(item);
+        }
+        return;
       }
-      return;
-    }
-    if (item.pvBonus && !item.consumable) {
-      // Passive item, effect handled automatically
-      return;
-    }
-    if (units.blue.pa < item.paCost) return;
-    units.blue.pa -= item.paCost;
-    updateBluePanel(units.blue);
-    item.apply?.(units.blue);
-    updateBluePanel(units.blue);
-    if (item.consumable) {
-      card.remove();
-      updateInventoryStorage();
-    }
-  });
+      if (item.pvBonus && !item.consumable) {
+        // Passive item, effect handled automatically
+        return;
+      }
+      if (units.blue.pa < item.paCost) return;
+      units.blue.pa -= item.paCost;
+      updateBluePanel(units.blue);
+      item.apply?.(units.blue);
+      updateBluePanel(units.blue);
+      if (item.consumable) {
+        card.remove();
+        slot.classList.remove('is-selected');
+        slot.removeEventListener('click', onSlotClick);
+        updateInventoryStorage();
+      }
+    };
+    slot.addEventListener('click', onSlotClick);
+  };
 
   const empty = Array.from(slots.children).find(s => s.children.length === 0);
   if (empty) {
+    bindSlot(empty);
     empty.appendChild(card);
     updateInventoryStorage();
     return card;
@@ -333,6 +344,7 @@ export function addItemCard(item) {
     const slot = e.currentTarget;
     if (slot === uiState.socoSlot) return;
     slot.innerHTML = '';
+    bindSlot(slot);
     slot.appendChild(card);
     overlay.remove();
     slotArr.forEach(s => s.removeEventListener('click', onReplace));
@@ -356,12 +368,14 @@ export function resetUI() {
       slot.classList.remove('is-selected');
     } else {
       slot.innerHTML = '';
+      slot.classList.remove('is-selected');
     }
   });
   uiState.socoSelecionado = false;
-  uiState.selectedItem?.card?.classList.remove('is-selected');
+  uiState.selectedItem?.slot?.classList.remove('is-selected');
   uiState.selectedItem = null;
   clearItemAlcance();
+  clearSocoAlcance();
   updateBluePanel(units.blue);
 }
 
