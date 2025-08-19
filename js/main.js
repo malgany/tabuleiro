@@ -151,19 +151,19 @@ export function gameOver(result) {
           el.addEventListener(
             'click',
             () => {
-              ui.addItemCard(it);
-
-              // Advance stage and show the map screen again
-              const stageKey = 'stage';
-              const stage = Number(localStorage.getItem(stageKey)) || 0;
-              localStorage.setItem(stageKey, String(stage + 1));
-              const playedKey = 'played';
-              localStorage.setItem(playedKey, 'true');
-              const boardScreen = document.getElementById('board-screen');
-              const mapScreen = document.getElementById('map-screen');
-              if (boardScreen) boardScreen.style.display = 'none';
-              if (mapScreen) mapScreen.style.display = '';
-              renderMap();
+              ui.addItemCard(it, () => {
+                // Advance stage and show the map screen again
+                const stageKey = 'stage';
+                const stage = Number(localStorage.getItem(stageKey)) || 0;
+                localStorage.setItem(stageKey, String(stage + 1));
+                const playedKey = 'played';
+                localStorage.setItem(playedKey, 'true');
+                const boardScreen = document.getElementById('board-screen');
+                const mapScreen = document.getElementById('map-screen');
+                if (boardScreen) boardScreen.style.display = 'none';
+                if (mapScreen) mapScreen.style.display = '';
+                renderMap();
+              });
             },
             { once: true },
           );

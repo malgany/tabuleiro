@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 const { gameOver } = await import('../js/main.js');
 const { units } = await import('../js/units.js');
 const ui = await import('../js/ui.js');
+const { itemsConfig } = await import('../js/config.js');
 
 describe('gameOver victory chest', () => {
   beforeEach(() => {
@@ -138,5 +139,37 @@ describe('gameOver victory chest', () => {
     expect(units.blue.maxPv).toBe(13);
     expect(units.blue.pv).toBe(13);
     expect(slots[1].children.length).toBe(1);
+  });
+
+  test('requires replacing item before returning to map when inventory is full', () => {
+    const items = itemsConfig.slice(0, 3);
+    items.forEach(it => ui.addItemCard(it));
+
+    gameOver('vitoria');
+    jest.advanceTimersByTime(1000);
+    document.querySelector('.chest')?.dispatchEvent(new Event('click'));
+    const lootItem = document.querySelector('.loot-item');
+    lootItem?.dispatchEvent(new Event('click'));
+
+    expect(localStorage.getItem('stage')).toBeNull();
+    const boardScreen = document.getElementById('board-screen');
+    const mapScreen = document.getElementById('map-screen');
+    expect(boardScreen?.style.display).not.toBe('none');
+    expect(mapScreen?.style.display).toBe('none');
+    const preReplaceOverlay = Array.from(document.querySelectorAll('.overlay')).some(o =>
+      o.textContent.includes('Inventário cheio'),
+    );
+    expect(preReplaceOverlay).toBe(true);
+
+    const slots = document.querySelectorAll('.turn-panel .slot');
+    slots[2].dispatchEvent(new Event('click'));
+
+    expect(localStorage.getItem('stage')).toBe('1');
+    expect(boardScreen?.style.display).toBe('none');
+    expect(mapScreen?.style.display).toBe('');
+    const postReplaceOverlay = Array.from(document.querySelectorAll('.overlay')).some(o =>
+      o.textContent.includes('Inventário cheio'),
+    );
+    expect(postReplaceOverlay).toBe(false);
   });
 });
