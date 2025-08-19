@@ -26,6 +26,7 @@ describe('start screen', () => {
     expect(document.getElementById('start-screen').style.display).toBe('');
     expect(document.getElementById('map-screen').style.display).toBe('none');
     expect(document.getElementById('board-screen').style.display).toBe('none');
+    expect(document.getElementById('continue-game').disabled).toBe(true);
   });
 
   test('starts a new game clearing storage', async () => {
@@ -42,6 +43,7 @@ describe('start screen', () => {
   test('continues existing game without clearing storage', async () => {
     localStorage.setItem('stage', '1');
     await import('../js/main.js');
+    expect(document.getElementById('continue-game').disabled).toBe(false);
     document.getElementById('continue-game').click();
     expect(localStorage.getItem('stage')).toBe('1');
     expect(document.getElementById('start-screen').style.display).toBe('none');

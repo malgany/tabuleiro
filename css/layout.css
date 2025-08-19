@@ -6,6 +6,14 @@
   padding: 24px;
 }
 
+#start-screen {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+
 .layout {
   position: relative;
   width: min(840px, 90vw);

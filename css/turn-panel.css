@@ -89,6 +89,11 @@
 
 .pass-btn:hover { filter: brightness(1.05); }
 
+.pass-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .turn-panel .turn-timer {
   font-weight: 700;
   opacity: .9;
