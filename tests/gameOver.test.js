@@ -116,7 +116,7 @@ describe('gameOver victory chest', () => {
     expect(slots[1].children.length).toBe(0);
   });
 
-  test('shield increases maxPv only when card is used', () => {
+  test('shield increases PV and maxPv passively without being consumed', () => {
     jest.spyOn(Math, 'random').mockReturnValue(0.8);
     units.blue.maxPv = 10;
     units.blue.pv = 10;
@@ -128,11 +128,13 @@ describe('gameOver victory chest', () => {
 
     const slots = document.querySelectorAll('.slot');
     expect(slots[1].children.length).toBe(1);
-    expect(units.blue.maxPv).toBe(10);
+    expect(units.blue.maxPv).toBe(13);
+    expect(units.blue.pv).toBe(13);
 
     const card = slots[1].firstElementChild;
     card?.dispatchEvent(new Event('click'));
     expect(units.blue.maxPv).toBe(13);
-    expect(slots[1].children.length).toBe(0);
+    expect(units.blue.pv).toBe(13);
+    expect(slots[1].children.length).toBe(1);
   });
 });

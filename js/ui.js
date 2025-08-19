@@ -47,6 +47,24 @@ export function updateBluePanel(state) {
   bluePanelRefs.pm.textContent = `${state.pm}`;
 }
 
+export function recalculatePvBonus() {
+  const slots = document.querySelectorAll('.turn-panel .slot');
+  const ids = Array.from(slots)
+    .slice(1)
+    .map(slot => slot.querySelector('.card-item')?.dataset.itemId)
+    .filter(Boolean);
+  let bonus = 0;
+  ids.forEach(id => {
+    const item = itemsConfig.find(i => i.id === id);
+    if (item?.pvBonus && !item.consumable) bonus += item.pvBonus;
+  });
+  const prevMax = units.blue.maxPv;
+  units.blue.maxPv = 10 + bonus;
+  const diff = units.blue.maxPv - prevMax;
+  units.blue.pv = Math.min(units.blue.pv + diff, units.blue.maxPv);
+  updateBluePanel(units.blue);
+}
+
 const TURN_SECONDS = 30;
 let timeLeft = TURN_SECONDS;
 let intervalId = null;
@@ -233,6 +251,7 @@ function updateInventoryStorage() {
     .map(slot => slot.querySelector('.card-item')?.dataset.itemId)
     .filter(Boolean);
   localStorage.setItem('inventory', JSON.stringify(ids));
+  recalculatePvBonus();
 }
 
 export function loadInventory() {
@@ -241,6 +260,7 @@ export function loadInventory() {
     const item = itemsConfig.find(i => i.id === id);
     if (item) addItemCard(item);
   });
+  recalculatePvBonus();
 }
 
 export function addItemCard(item) {
@@ -278,6 +298,10 @@ export function addItemCard(item) {
         card.classList.add('is-selected');
         showItemAlcance(item);
       }
+      return;
+    }
+    if (item.pvBonus && !item.consumable) {
+      // Passive item, effect handled automatically
       return;
     }
     if (units.blue.pa < item.paCost) return;
