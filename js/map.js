@@ -13,6 +13,9 @@ const container = document.getElementById('map');
 const mapScreen = document.getElementById('map-screen');
 const boardScreen = document.getElementById('board-screen');
 const playBtn = document.getElementById('play');
+const startScreen = document.getElementById('start-screen');
+const newBtn = document.getElementById('new-game');
+const continueBtn = document.getElementById('continue-game');
 
 function getStage() {
   let stage = Number(localStorage.getItem(stageKey));
@@ -78,5 +81,18 @@ playBtn?.addEventListener('click', () => {
   if (boardScreen) boardScreen.style.display = '';
   showOverlay();
   startBattle();
+});
+
+newBtn?.addEventListener('click', () => {
+  localStorage.clear();
+  renderMap();
+  if (startScreen) startScreen.style.display = 'none';
+  if (mapScreen) mapScreen.style.display = '';
+});
+
+continueBtn?.addEventListener('click', () => {
+  renderMap();
+  if (startScreen) startScreen.style.display = 'none';
+  if (mapScreen) mapScreen.style.display = '';
 });
 
