@@ -105,6 +105,10 @@ describe('startBattle', () => {
 describe('addItemCard', () => {
   afterEach(() => {
     document.body.innerHTML = '';
+    units.blue.maxPv = 10;
+    units.blue.pv = 10;
+    units.blue.pa = 6;
+    units.blue.pm = 3;
   });
 
   test('using heal item subtracts PA cost once', () => {
@@ -141,6 +145,22 @@ describe('addItemCard', () => {
     const hp = card.querySelector('.hp');
     expect(hp).not.toBeNull();
     expect(hp.textContent).toBe(`+${shield.pvBonus}`);
+  });
+
+  test('shield item passively increases PV and max PV without being consumed', () => {
+    document.body.innerHTML = '<div class="page"></div>';
+    initUI();
+    units.blue.pv = 10;
+    units.blue.maxPv = 10;
+    const shield = itemsConfig.find(i => i.id === 'escudo');
+    addItemCard(shield);
+    expect(units.blue.maxPv).toBe(10 + shield.pvBonus);
+    expect(units.blue.pv).toBe(10 + shield.pvBonus);
+    const card = document.querySelector('.card-item');
+    card.click();
+    expect(units.blue.maxPv).toBe(10 + shield.pvBonus);
+    expect(units.blue.pv).toBe(10 + shield.pvBonus);
+    expect(document.querySelector('.card-item')).not.toBeNull();
   });
 });
 
