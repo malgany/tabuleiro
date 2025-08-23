@@ -19,6 +19,10 @@ export const uiState = {
   selectedItem: null,
 };
 
+export function isMovementHighlightAllowed() {
+  return !uiState.socoSelecionado && !uiState.selectedItem;
+}
+
 function showSocoAlcance() {
   const active = getActive();
   showSocoAlcanceUnits(active);
@@ -202,6 +206,7 @@ export function initUI() {
       uiState.selectedItem?.slot?.classList.remove('is-selected');
       uiState.selectedItem = null;
       clearItemAlcance();
+      clearReachable();
       showSocoAlcance();
     } else {
       clearSocoAlcance();
@@ -303,6 +308,7 @@ export function addItemCard(item, onComplete = () => {}) {
           uiState.socoSelecionado = false;
           uiState.socoSlot?.classList.remove('is-selected');
           clearSocoAlcance();
+          clearReachable();
           uiState.selectedItem = { item, card, slot };
           slot.classList.add('is-selected');
           showItemAlcance(item);
