@@ -1,5 +1,6 @@
 import { ROWS, COLS, rowColToIndex, isInside } from './board-utils.js';
 import { computeReachable, buildPath } from './pathfinding.js';
+import { isMovementHighlightAllowed } from './ui.js';
 
 let cards = [];
 let board = null;
@@ -67,6 +68,7 @@ export function resetUnits() {
     u.el = createUnitEl(u.id);
     u.el.addEventListener('mouseenter', () => {
       if (getActive().id !== u.id) return;
+      if (!isMovementHighlightAllowed()) return;
       showReachableFor(u);
     });
   });
