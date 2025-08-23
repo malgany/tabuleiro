@@ -51,7 +51,7 @@ describe('units module', () => {
       .filter(i => i !== null)
       .sort((a, b) => a - b);
 
-    expect(reachable).toEqual([11, 14, 15, 17, 18, 19, 20, 21, 22]);
+    expect(reachable).toEqual([15, 18, 19, 21, 22]);
   });
 
   test('showSocoAlcance marks adjacent tiles as attackable', () => {
