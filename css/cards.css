@@ -36,6 +36,8 @@
 /* Alcance (células verdes) */
 .card.reachable {
   cursor: pointer;
+  background: rgba(16, 185, 129, 0.3);
+  background-image: none;
 }
 
 .card.path {
