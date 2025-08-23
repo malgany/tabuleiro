@@ -9,7 +9,7 @@ export const units = {
     id: 'blue',
     maxPv: 10,
     pv: 10,
-    pm: 3,
+    pm: 2,
     pa: 6,
     pos: { row: 5, col: 3 },
     x: 0,
@@ -21,7 +21,7 @@ export const units = {
     id: 'red',
     maxPv: 10,
     pv: 10,
-    pm: 3,
+    pm: 2,
     pa: 6,
     pos: { row: 0, col: 0 },
     x: 0,
@@ -55,12 +55,12 @@ export function resetUnits() {
   units.blue.pos = { row: 5, col: 3 };
   units.blue.maxPv = 10;
   units.blue.pv = units.blue.maxPv;
-  units.blue.pm = 3;
+  units.blue.pm = 2;
   units.blue.pa = 6;
   units.red.pos = { row: 0, col: 0 };
   units.red.maxPv = 10;
   units.red.pv = units.red.maxPv;
-  units.red.pm = 3;
+  units.red.pm = 2;
   units.red.pa = 6;
   Object.values(units).forEach(u => {
     u.el?.remove();

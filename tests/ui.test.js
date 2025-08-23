@@ -126,7 +126,7 @@ describe('addItemCard', () => {
     units.blue.maxPv = 10;
     units.blue.pv = 10;
     units.blue.pa = 6;
-    units.blue.pm = 3;
+    units.blue.pm = 2;
   });
 
   test('using heal item subtracts PA cost once', () => {

@@ -144,7 +144,7 @@ export function gameOver(result) {
 
 export function passTurn() {
   const finished = getActive();
-  finished.pm = 3;
+  finished.pm = 2;
   finished.pa = 6;
   const next = finished.id === 'blue' ? 'red' : 'blue';
   setActiveId(next);
