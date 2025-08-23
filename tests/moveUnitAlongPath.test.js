@@ -52,7 +52,7 @@ test('moveUnitAlongPath snaps unit to destination without extra transition', asy
     { row: 1, col: 2 },
   ];
 
-  const promise = moveUnitAlongPath(unit, path, 1);
+  const promise = moveUnitAlongPath(unit, path, 2);
   // simulate end of movement transition
   el.dispatchEvent(new Event('transitionend'));
   await promise;

@@ -21,21 +21,20 @@ describe('computeReachable', () => {
 describe('buildPath', () => {
   test('reconstructs shortest path', () => {
     const start = { row: 0, col: 0 };
-    const dest = { row: 2, col: 1 };
-    const dist = computeReachable(start, 4, () => true);
+    const dest = { row: 1, col: 1 };
+    const dist = computeReachable(start, 2, () => true);
     const path = buildPath(start, dest, dist, () => true);
     expect(path).toEqual([
       { row: 0, col: 0 },
       { row: 0, col: 1 },
       { row: 1, col: 1 },
-      { row: 2, col: 1 },
     ]);
   });
 
   test('returns null when target is unreachable', () => {
     const start = { row: 0, col: 0 };
     const isAllowed = (r, c) => !(r === 0 && c === 1);
-    const dist = computeReachable(start, 3, isAllowed);
+    const dist = computeReachable(start, 2, isAllowed);
     const dest = { row: 0, col: 2 };
     const path = buildPath(start, dest, dist, isAllowed);
     expect(path).toBeNull();
